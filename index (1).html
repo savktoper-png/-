@@ -1,0 +1,857 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <title>7K Casino | Слот-симулятор</title>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Rajdhani:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            user-select: none;
+            -webkit-tap-highlight-color: transparent;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --7k-gold: #ffd700;
+            --7k-gold-dark: #b8860b;
+            --7k-purple: #6b1b6b;
+            --7k-purple-dark: #3d0d3d;
+            --7k-black: #0a0a0f;
+            --7k-dark: #12121a;
+            --7k-glow: 0 0 20px rgba(255, 215, 0, 0.6), 0 0 40px rgba(107, 27, 107, 0.4);
+        }
+
+        body {
+            background: 
+                radial-gradient(ellipse at top, #1a0a2e 0%, var(--7k-black) 50%),
+                repeating-radial-gradient(circle at 0 0, transparent 0, var(--7k-black) 10px),
+                linear-gradient(135deg, #0f0c29, #302b63, #24243e);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-family: 'Rajdhani', 'Segoe UI', sans-serif;
+            margin: 0;
+            padding: 15px;
+            overflow-x: hidden;
+            position: relative;
+        }
+
+        /* Анимированный фон с частицами */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background-image: 
+                radial-gradient(2px 2px at 20px 30px, var(--7k-gold), transparent),
+                radial-gradient(2px 2px at 40px 70px, rgba(255,215,0,0.6), transparent),
+                radial-gradient(2px 2px at 90px 40px, var(--7k-purple), transparent);
+            background-size: 200px 200px;
+            animation: sparkle 8s linear infinite;
+            opacity: 0.3;
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        @keyframes sparkle {
+            0% { background-position: 0 0, 0 0, 0 0; }
+            100% { background-position: 200px 200px, 150px 100px, 100px 150px; }
+        }
+
+        /* Логотип 7K */
+        .casino-logo {
+            position: absolute;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-family: 'Orbitron', monospace;
+            font-size: 2.5rem;
+            font-weight: 900;
+            color: var(--7k-gold);
+            text-shadow: 
+                0 0 10px var(--7k-gold),
+                0 0 20px var(--7k-purple),
+                0 0 40px rgba(255, 215, 0, 0.8);
+            letter-spacing: 4px;
+            z-index: 10;
+            animation: pulse 2s ease-in-out infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { text-shadow: 0 0 10px var(--7k-gold), 0 0 20px var(--7k-purple); }
+            50% { text-shadow: 0 0 20px var(--7k-gold), 0 0 40px var(--7k-purple), 0 0 60px rgba(255,215,0,0.9); }
+        }
+
+        .casino-logo span {
+            color: var(--7k-purple);
+            text-shadow: 0 0 15px var(--7k-gold);
+        }
+
+        /* Основной контейнер */
+        .slot-machine {
+            background: 
+                linear-gradient(145deg, rgba(30,15,45,0.95), rgba(18,12,30,0.98)),
+                url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" width="100" height="100"><rect width="100" height="100" fill="%231a0a2e"/><path d="M0,0 L100,100 M100,0 L0,100" stroke="%236b1b6b22" stroke-width="1"/></svg>');
+            border-radius: 60px 60px 40px 40px;
+            padding: 35px 30px 40px 30px;
+            box-shadow: 
+                var(--7k-glow),
+                0 25px 50px rgba(0,0,0,0.8),
+                inset 0 1px 0 rgba(255,255,255,0.1);
+            border: 3px solid transparent;
+            border-image: linear-gradient(45deg, var(--7k-gold), var(--7k-purple), var(--7k-gold)) 1;
+            position: relative;
+            z-index: 5;
+            max-width: 520px;
+            width: 100%;
+        }
+
+        .slot-machine::before {
+            content: '7K';
+            position: absolute;
+            top: -15px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: linear-gradient(45deg, var(--7k-gold), #fff, var(--7k-gold));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            font-family: 'Orbitron', monospace;
+            font-weight: 900;
+            font-size: 1.8rem;
+            text-shadow: 0 2px 10px rgba(0,0,0,0.5);
+            padding: 5px 25px;
+            border-radius: 30px;
+            border: 2px solid var(--7k-gold);
+            box-shadow: 0 4px 15px rgba(255, 215, 0, 0.4);
+        }
+
+        .display-area {
+            background: linear-gradient(180deg, #0d0d15 0%, #151025 100%);
+            border-radius: 45px;
+            padding: 25px 20px;
+            box-shadow: 
+                inset 0 2px 10px rgba(0,0,0,0.6),
+                inset 0 -2px 10px rgba(107, 27, 107, 0.3),
+                0 8px 25px rgba(0,0,0,0.5);
+            border: 2px solid rgba(255, 215, 0, 0.2);
+        }
+
+        /* Барабаны */
+        .reels-container {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            flex-wrap: wrap;
+            margin-bottom: 25px;
+            position: relative;
+        }
+
+        .reels-container::before,
+        .reels-container::after {
+            content: '✦';
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--7k-gold);
+            font-size: 2rem;
+            text-shadow: 0 0 10px var(--7k-gold);
+            opacity: 0.7;
+            z-index: 1;
+        }
+        .reels-container::before { left: -25px; }
+        .reels-container::after { right: -25px; }
+
+        .reel {
+            background: linear-gradient(145deg, #1a1525, #0f0d1a);
+            border-radius: 25px;
+            padding: 10px 6px;
+            box-shadow: 
+                inset 0 0 0 2px var(--7k-gold-dark),
+                inset 0 0 20px rgba(107, 27, 107, 0.4),
+                0 8px 25px rgba(0,0,0,0.6);
+            transition: all 0.15s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .reel::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0; height: 3px;
+            background: linear-gradient(90deg, transparent, var(--7k-gold), transparent);
+            animation: scanline 3s linear infinite;
+        }
+
+        @keyframes scanline {
+            0% { top: -100%; }
+            100% { top: 100%; }
+        }
+
+        canvas {
+            display: block;
+            margin: 0 auto;
+            background: linear-gradient(145deg, #fff9e6, #ffecb3);
+            border-radius: 22px;
+            box-shadow: 
+                inset 0 0 0 3px #d4af37,
+                inset 0 0 15px rgba(0,0,0,0.2),
+                0 5px 15px rgba(0,0,0,0.4);
+            width: 115px;
+            height: 115px;
+            position: relative;
+        }
+
+        canvas::after {
+            content: '';
+            position: absolute;
+            top: 5px; left: 5px; right: 5px; bottom: 5px;
+            border-radius: 18px;
+            border: 2px solid rgba(212, 175, 55, 0.3);
+            pointer-events: none;
+        }
+
+        /* Панель информации */
+        .info-panel {
+            background: linear-gradient(135deg, rgba(30,20,50,0.9), rgba(20,15,35,0.95));
+            backdrop-filter: blur(12px);
+            border-radius: 55px;
+            margin-top: 22px;
+            padding: 18px 22px;
+            display: flex;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 12px;
+            border: 2px solid rgba(255, 215, 0, 0.3);
+            box-shadow: 0 5px 20px rgba(0,0,0,0.4);
+        }
+
+        .balance-box, .bet-box, .win-box {
+            background: linear-gradient(145deg, #1a1225, #0f0c18);
+            padding: 10px 22px;
+            border-radius: 45px;
+            font-weight: 700;
+            font-size: 1.4rem;
+            color: #fff;
+            text-shadow: 0 2px 0 rgba(0,0,0,0.5);
+            font-family: 'Orbitron', monospace;
+            letter-spacing: 1px;
+            border: 1px solid rgba(255, 215, 0, 0.4);
+            box-shadow: 0 3px 10px rgba(0,0,0,0.3);
+            min-width: 140px;
+            text-align: center;
+            transition: all 0.2s ease;
+        }
+
+        .balance-box:hover, .bet-box:hover, .win-box:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 20px rgba(255, 215, 0, 0.3);
+            border-color: var(--7k-gold);
+        }
+
+        .balance-box span, .bet-box span, .win-box span {
+            font-size: 0.8rem;
+            color: var(--7k-gold);
+            margin-right: 6px;
+            font-family: 'Rajdhani', sans-serif;
+            font-weight: 600;
+        }
+
+        .jackpot-light {
+            background: linear-gradient(45deg, #ff6b6b, var(--7k-gold), #ff6b6b);
+            background-size: 200% 200%;
+            animation: gradient-shift 3s ease infinite;
+            border-radius: 45px;
+            padding: 8px 20px;
+            font-size: 1.05rem;
+            font-weight: 800;
+            text-align: center;
+            color: #1a0a2e;
+            font-family: 'Orbitron', monospace;
+            text-shadow: 0 1px 0 rgba(255,255,255,0.3);
+            box-shadow: 0 4px 15px rgba(255, 107, 107, 0.4);
+            min-width: 180px;
+            border: 2px solid #fff;
+        }
+
+        @keyframes gradient-shift {
+            0%, 100% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+        }
+
+        /* Кнопки управления */
+        .controls {
+            display: flex;
+            gap: 14px;
+            justify-content: center;
+            margin-top: 22px;
+            flex-wrap: wrap;
+        }
+
+        button {
+            background: linear-gradient(to bottom, #d4af37, #a67c00);
+            border: none;
+            font-size: 1.15rem;
+            font-weight: 700;
+            padding: 12px 24px;
+            border-radius: 50px;
+            color: #1a0a00;
+            cursor: pointer;
+            transition: all 0.12s ease;
+            box-shadow: 
+                0 6px 0 #7a5400,
+                0 8px 20px rgba(0,0,0,0.4);
+            font-family: 'Rajdhani', sans-serif;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            position: relative;
+            overflow: hidden;
+        }
+
+        button::before {
+            content: '';
+            position: absolute;
+            top: 0; left: -100%;
+            width: 100%; height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent);
+            transition: left 0.4s ease;
+        }
+
+        button:hover::before {
+            left: 100%;
+        }
+
+        button:active {
+            transform: translateY(4px);
+            box-shadow: 0 2px 0 #7a5400, 0 4px 10px rgba(0,0,0,0.4);
+        }
+
+        button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 0 #7a5400, 0 12px 25px rgba(212, 175, 55, 0.5);
+        }
+
+        .spin-btn {
+            background: linear-gradient(to bottom, #ffd700, #e6b400, #cc9900);
+            font-size: 1.5rem;
+            padding: 12px 45px;
+            box-shadow: 
+                0 7px 0 #996600,
+                0 0 25px rgba(255, 215, 0, 0.6),
+                0 10px 30px rgba(0,0,0,0.5);
+            font-family: 'Orbitron', monospace;
+            letter-spacing: 2px;
+            animation: glow-pulse 2s ease-in-out infinite;
+        }
+
+        @keyframes glow-pulse {
+            0%, 100% { box-shadow: 0 7px 0 #996600, 0 0 25px rgba(255, 215, 0, 0.6), 0 10px 30px rgba(0,0,0,0.5); }
+            50% { box-shadow: 0 7px 0 #996600, 0 0 35px rgba(255, 215, 0, 0.9), 0 10px 40px rgba(255, 215, 0, 0.4); }
+        }
+
+        .spin-btn:hover {
+            animation: none;
+            box-shadow: 0 9px 0 #996600, 0 0 45px rgba(255, 215, 0, 1), 0 15px 40px rgba(255, 215, 0, 0.6);
+        }
+
+        #resetGame {
+            background: linear-gradient(to bottom, #6b1b6b, #4a0f4a);
+            color: #fff;
+            box-shadow: 0 6px 0 #330a33, 0 8px 20px rgba(107, 27, 107, 0.5);
+        }
+
+        #resetGame:hover {
+            box-shadow: 0 8px 0 #330a33, 0 12px 25px rgba(107, 27, 107, 0.7);
+        }
+
+        button:disabled {
+            opacity: 0.5;
+            transform: none !important;
+            cursor: not-allowed;
+            filter: grayscale(0.3);
+            box-shadow: 0 4px 0 #555 !important;
+        }
+
+        /* Подвал с правилами */
+        .rules-footer {
+            text-align: center;
+            margin-top: 18px;
+            font-size: 0.75rem;
+            color: #c9a961;
+            background: rgba(30, 20, 50, 0.6);
+            padding: 10px 15px;
+            border-radius: 25px;
+            border: 1px solid rgba(255, 215, 0, 0.2);
+            line-height: 1.4;
+        }
+
+        .rules-footer strong {
+            color: var(--7k-gold);
+            font-family: 'Orbitron', monospace;
+        }
+
+        /* Эффект победы */
+        .win-animation {
+            animation: win-flash 0.3s ease 3;
+        }
+
+        @keyframes win-flash {
+            0%, 100% { box-shadow: inset 0 0 0 2px var(--7k-gold-dark); }
+            50% { box-shadow: inset 0 0 20px var(--7k-gold), 0 0 30px rgba(255, 215, 0, 0.8); }
+        }
+
+        /* Адаптивность */
+        @media (max-width: 600px) {
+            .casino-logo { font-size: 2rem; top: 12px; }
+            .slot-machine { padding: 25px 20px 30px; border-radius: 50px 50px 35px 35px; }
+            .reels-container { gap: 10px; }
+            .reels-container::before, .reels-container::after { display: none; }
+            canvas { width: 95px; height: 95px; }
+            .balance-box, .bet-box, .win-box { 
+                font-size: 1.1rem; 
+                padding: 8px 16px; 
+                min-width: 120px;
+            }
+            button { font-size: 0.95rem; padding: 10px 18px; }
+            .spin-btn { font-size: 1.25rem; padding: 10px 35px; }
+            .jackpot-light { font-size: 0.95rem; padding: 6px 15px; min-width: 160px; }
+            .rules-footer { font-size: 0.7rem; padding: 8px 12px; }
+        }
+
+        @media (max-width: 400px) {
+            .info-panel { flex-direction: column; align-items: center; }
+            .balance-box, .bet-box, .win-box, .jackpot-light { width: 100%; max-width: 280px; }
+            .controls { flex-direction: column; align-items: center; }
+            button, .spin-btn { width: 100%; max-width: 280px; }
+        }
+
+        /* Уведомления */
+        .notification {
+            position: fixed;
+            top: 80px;
+            left: 50%;
+            transform: translateX(-50%) translateY(-100px);
+            background: linear-gradient(135deg, var(--7k-purple), #2a0a3a);
+            color: var(--7k-gold);
+            padding: 15px 30px;
+            border-radius: 50px;
+            font-family: 'Orbitron', monospace;
+            font-weight: 700;
+            font-size: 1.1rem;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.6), 0 0 30px rgba(255, 215, 0, 0.5);
+            border: 2px solid var(--7k-gold);
+            z-index: 100;
+            transition: transform 0.4s ease;
+            text-align: center;
+            max-width: 90vw;
+        }
+
+        .notification.show {
+            transform: translateX(-50%) translateY(0);
+        }
+
+        .notification.jackpot {
+            animation: jackpot-bounce 0.6s ease;
+            background: linear-gradient(45deg, #ff006e, #ff6b00, var(--7k-gold));
+            color: #000;
+            font-size: 1.3rem;
+            text-shadow: 0 2px 0 rgba(255,255,255,0.3);
+        }
+
+        @keyframes jackpot-bounce {
+            0%, 100% { transform: translateX(-50%) translateY(0) scale(1); }
+            25% { transform: translateX(-50%) translateY(-10px) scale(1.05); }
+            50% { transform: translateX(-50%) translateY(0) scale(1); }
+            75% { transform: translateX(-50%) translateY(-5px) scale(1.02); }
+        }
+
+        /* Декоративные элементы */
+        .decoration {
+            position: absolute;
+            font-size: 1.5rem;
+            opacity: 0.6;
+            pointer-events: none;
+            animation: float 6s ease-in-out infinite;
+        }
+        .dec-1 { top: 15%; left: 5%; animation-delay: 0s; }
+        .dec-2 { top: 25%; right: 8%; animation-delay: 1s; font-size: 1.2rem; }
+        .dec-3 { bottom: 20%; left: 10%; animation-delay: 2s; }
+        .dec-4 { bottom: 15%; right: 5%; animation-delay: 0.5s; font-size: 1.3rem; }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0) rotate(0deg); }
+            50% { transform: translateY(-15px) rotate(5deg); }
+        }
+    </style>
+</head>
+<body>
+    <!-- Декоративные элементы -->
+    <div class="decoration dec-1">🎰</div>
+    <div class="decoration dec-2">💎</div>
+    <div class="decoration dec-3">🎲</div>
+    <div class="decoration dec-4">🍀</div>
+
+    <!-- Логотип -->
+    <div class="casino-logo">7<span>K</span> CASINO</div>
+
+    <!-- Уведомления -->
+    <div class="notification" id="notification"></div>
+
+    <!-- Основной контейнер -->
+    <div class="slot-machine">
+        <div class="display-area">
+            <div class="reels-container" id="reelsContainer">
+                <div class="reel"><canvas id="reel0" width="120" height="120"></canvas></div>
+                <div class="reel"><canvas id="reel1" width="120" height="120"></canvas></div>
+                <div class="reel"><canvas id="reel2" width="120" height="120"></canvas></div>
+            </div>
+
+            <div class="info-panel">
+                <div class="balance-box"><span>💰 БАЛАНС</span><span id="balanceAmount">1000</span></div>
+                <div class="bet-box"><span>🎲 СТАВКА</span><span id="betAmount">50</span></div>
+                <div class="win-box"><span>🏆 ВЫИГРЫШ</span><span id="winAmount">0</span></div>
+                <div class="jackpot-light" id="jackpotIndicator">🔥 ДЖЕКПОТ: 5000 🔥</div>
+            </div>
+
+            <div class="controls">
+                <button id="decreaseBet">− СТАВКА</button>
+                <button id="increaseBet">+ СТАВКА</button>
+                <button id="spinButton" class="spin-btn">⚡ 7K SPIN ⚡</button>
+                <button id="resetGame">🔄 СБРОС</button>
+            </div>
+            
+            <div class="rules-footer">
+                <strong>ПРАВИЛА 7K:</strong> 3×🍒/🍋/🍊/🍉 = ×5 | 3×🔔/⭐ = ×7 | 3×7️⃣ = <strong>ДЖЕКПОТ 5000</strong> | 2×совпадения = ×2
+            </div>
+        </div>
+    </div>
+
+<script>
+    (function(){
+        // ---------- НАСТРОЙКИ СЛОТОВ 7K CASINO ----------
+        const SYMBOLS = ["🍒", "🍋", "🍊", "🍉", "🔔", "⭐", "7️⃣"];
+        const SYMBOL_WEIGHTS = [20, 20, 18, 15, 12, 10, 5];
+        
+        let weightedPool = [];
+        for(let i=0; i<SYMBOLS.length; i++) {
+            for(let w=0; w<SYMBOL_WEIGHTS[i]; w++) {
+                weightedPool.push(SYMBOLS[i]);
+            }
+        }
+        
+        function getRandomSymbol() {
+            return weightedPool[Math.floor(Math.random() * weightedPool.length)];
+        }
+        
+        // Игровые переменные
+        let balance = 1000;
+        let currentBet = 50;
+        let lastWin = 0;
+        let isSpinning = false;
+        let spinInterval = null;
+        let currentSymbols = ["🍒", "🍒", "🍒"];
+        const JACKPOT_AMOUNT = 5000;
+        
+        // DOM элементы
+        const balanceSpan = document.getElementById('balanceAmount');
+        const betSpan = document.getElementById('betAmount');
+        const winSpan = document.getElementById('winAmount');
+        const spinBtn = document.getElementById('spinButton');
+        const decreaseBetBtn = document.getElementById('decreaseBet');
+        const increaseBetBtn = document.getElementById('increaseBet');
+        const resetBtn = document.getElementById('resetGame');
+        const jackpotIndicator = document.getElementById('jackpotIndicator');
+        const notification = document.getElementById('notification');
+        
+        // Canvas
+        const canvas0 = document.getElementById('reel0');
+        const canvas1 = document.getElementById('reel1');
+        const canvas2 = document.getElementById('reel2');
+        const ctx0 = canvas0.getContext('2d');
+        const ctx1 = canvas1.getContext('2d');
+        const ctx2 = canvas2.getContext('2d');
+        
+        // Отрисовка символа в стиле 7K
+        function drawSymbol(ctx, symbol, width, height) {
+            ctx.clearRect(0, 0, width, height);
+            
+            // Фон с градиентом
+            const grad = ctx.createLinearGradient(0, 0, width, height);
+            grad.addColorStop(0, '#fff9e6');
+            grad.addColorStop(0.5, '#ffecb3');
+            grad.addColorStop(1, '#ffe082');
+            ctx.fillStyle = grad;
+            ctx.fillRect(0, 0, width, height);
+            
+            // Рамка с золотым блеском
+            ctx.strokeStyle = '#d4af37';
+            ctx.lineWidth = 3;
+            ctx.strokeRect(4, 4, width-8, height-8);
+            
+            // Внутренняя рамка
+            ctx.strokeStyle = 'rgba(212, 175, 55, 0.4)';
+            ctx.lineWidth = 1;
+            ctx.strokeRect(8, 8, width-16, height-16);
+            
+            // Символ
+            ctx.font = `bold ${Math.floor(height * 0.52)}px "Segoe UI Emoji", "Apple Color Emoji", sans-serif`;
+            ctx.textAlign = "center";
+            ctx.textBaseline = "middle";
+            ctx.shadowBlur = 8;
+            ctx.shadowColor = "rgba(107, 27, 107, 0.5)";
+            ctx.fillStyle = "#2a1508";
+            ctx.fillText(symbol, width/2, height/2);
+            
+            // Блеск
+            ctx.shadowBlur = 0;
+            ctx.fillStyle = "rgba(255, 255, 255, 0.6)";
+            ctx.font = `${Math.floor(height * 0.18)}px sans-serif`;
+            ctx.fillText("✨", width-18, 18);
+            
+            // Логотип 7K в углу
+            ctx.fillStyle = "rgba(107, 27, 107, 0.3)";
+            ctx.font = `bold ${Math.floor(height * 0.15)}px 'Orbitron', monospace`;
+            ctx.fillText("7K", 15, height-12);
+        }
+        
+        function updateAllReelsDisplay() {
+            drawSymbol(ctx0, currentSymbols[0], 120, 120);
+            drawSymbol(ctx1, currentSymbols[1], 120, 120);
+            drawSymbol(ctx2, currentSymbols[2], 120, 120);
+        }
+        
+        // Показ уведомления
+        function showNotification(message, isJackpot = false) {
+            notification.textContent = message;
+            notification.className = 'notification' + (isJackpot ? ' jackpot' : '');
+            notification.classList.add('show');
+            
+            setTimeout(() => {
+                notification.classList.remove('show');
+            }, 3000);
+        }
+        
+        // Обновление UI
+        function updateUI() {
+            balanceSpan.innerText = Math.floor(balance);
+            betSpan.innerText = currentBet;
+            winSpan.innerText = lastWin;
+            jackpotIndicator.innerHTML = `🔥 ДЖЕКПОТ: ${JACKPOT_AMOUNT} 🔥`;
+            
+            if(lastWin > 0) {
+                winSpan.style.color = "#ffd700";
+                document.querySelector('.display-area').classList.add('win-animation');
+                setTimeout(() => {
+                    document.querySelector('.display-area').classList.remove('win-animation');
+                    if(lastWin === parseInt(winSpan.innerText)) winSpan.style.color = "#fff";
+                }, 600);
+            } else {
+                winSpan.style.color = "#fff";
+            }
+            
+            spinBtn.disabled = (balance < currentBet || isSpinning);
+            if(balance <= 0) {
+                spinBtn.disabled = true;
+                spinBtn.style.opacity = "0.6";
+            } else {
+                spinBtn.style.opacity = "1";
+            }
+        }
+        
+        // Расчет выигрыша
+        function calculateWin(symbolsArray, bet) {
+            const [s1, s2, s3] = symbolsArray;
+            
+            if(s1 === "7️⃣" && s2 === "7️⃣" && s3 === "7️⃣") {
+                return JACKPOT_AMOUNT;
+            }
+            if(s1 === s2 && s2 === s3) {
+                let multiplier = 5;
+                if(s1 === "⭐" || s1 === "🔔") multiplier = 7;
+                return bet * multiplier;
+            }
+            if(s1 === s2 || s2 === s3) {
+                return bet * 2;
+            }
+            if((s1 === "🍒" && s2 === "🍒") || (s2 === "🍒" && s3 === "🍒")) return bet * 2;
+            if(s1 === "7️⃣" || s2 === "7️⃣" || s3 === "7️⃣") {
+                if(s1 !== "7️⃣" && s2 !== "7️⃣" && s3 !== "7️⃣") {}
+                else return Math.floor(bet * 1.2);
+            }
+            return 0;
+        }
+        
+        // Анимация прокрутки
+        async function spinSlots() {
+            if(isSpinning) return;
+            if(balance < currentBet) {
+                showNotification("⚠️ Недостаточно средств!");
+                return;
+            }
+            
+            isSpinning = true;
+            updateUI();
+            balance -= currentBet;
+            lastWin = 0;
+            updateUI();
+            
+            let finalSymbols = ["", "", ""];
+            const spinDuration = [450, 550, 650];
+            const spinSteps = 15;
+            
+            function animateReel(index, durationMs, callbackFinal) {
+                const canvasCtx = [ctx0, ctx1, ctx2][index];
+                const steps = spinSteps;
+                let step = 0;
+                const intervalTime = durationMs / steps;
+                
+                let rollingInterval = setInterval(() => {
+                    let randomSym = getRandomSymbol();
+                    drawSymbol(canvasCtx, randomSym, 120, 120);
+                    step++;
+                    if(step >= steps) {
+                        clearInterval(rollingInterval);
+                        const finalSym = getRandomSymbol();
+                        finalSymbols[index] = finalSym;
+                        drawSymbol(canvasCtx, finalSym, 120, 120);
+                        if(callbackFinal) callbackFinal();
+                    }
+                }, intervalTime);
+            }
+            
+            let completed = 0;
+            function onReelDone() {
+                completed++;
+                if(completed === 3) {
+                    currentSymbols = [...finalSymbols];
+                    const winAmount = calculateWin(currentSymbols, currentBet);
+                    lastWin = winAmount;
+                    
+                    if(winAmount > 0) {
+                        balance += winAmount;
+                        winSpan.innerText = winAmount;
+                        
+                        if(winAmount === JACKPOT_AMOUNT) {
+                            showNotification("🎉🎉 ДЖЕКПОТ 7K! 5000 🎉🎉", true);
+                            // Золотой эффект на барабанах
+                            [ctx0, ctx1, ctx2].forEach(ctx => {
+                                ctx.fillStyle = "rgba(255, 215, 0, 0.7)";
+                                ctx.globalAlpha = 0.5;
+                                ctx.fillRect(0,0,120,120);
+                                ctx.globalAlpha = 1;
+                            });
+                            setTimeout(() => updateAllReelsDisplay(), 200);
+                        } else if(winAmount >= currentBet*5) {
+                            showNotification(`🔥 Крупный выигрыш: ${winAmount}!`);
+                        } else {
+                            showNotification(`✅ Выигрыш: ${winAmount}`);
+                        }
+                    } else {
+                        winSpan.innerText = "0";
+                    }
+                    
+                    updateUI();
+                    isSpinning = false;
+                    updateAllReelsDisplay();
+                    
+                    if(balance <= 0) {
+                        showNotification("💸 Баланс исчерпан! Нажмите СБРОС");
+                        spinBtn.disabled = true;
+                    }
+                }
+            }
+            
+            animateReel(0, spinDuration[0], onReelDone);
+            animateReel(1, spinDuration[1], onReelDone);
+            animateReel(2, spinDuration[2], onReelDone);
+        }
+        
+        // Изменение ставки
+        function changeBet(delta) {
+            if(isSpinning) return;
+            let newBet = currentBet + delta;
+            const minBet = 10;
+            const maxBet = Math.min(500, balance > 0 ? balance : 500);
+            
+            if(newBet >= minBet && newBet <= maxBet) {
+                currentBet = newBet;
+            } else if (newBet < minBet) currentBet = minBet;
+            else if (newBet > maxBet) currentBet = maxBet;
+            
+            if(currentBet > balance && balance > 0) currentBet = balance;
+            if(currentBet < 10) currentBet = 10;
+            updateUI();
+        }
+        
+        // Сброс игры
+        function resetGame() {
+            if(isSpinning) return;
+            balance = 1000;
+            currentBet = 50;
+            lastWin = 0;
+            currentSymbols = ["🍒", "🍒", "🍒"];
+            updateAllReelsDisplay();
+            updateUI();
+            isSpinning = false;
+            if(spinInterval) clearInterval(spinInterval);
+            spinBtn.disabled = false;
+            showNotification("🔄 Игра сброшена | Удачи в 7K!");
+        }
+        
+        // Инициализация
+        function initDisplay() {
+            updateAllReelsDisplay();
+            updateUI();
+        }
+        
+        // Обработчики
+        spinBtn.addEventListener('click', () => {
+            if(!isSpinning && balance >= currentBet) {
+                spinSlots().catch(e=>console.warn(e));
+            } else if(balance < currentBet) {
+                showNotification("⚠️ Увеличьте баланс или уменьшите ставку");
+            }
+        });
+        
+        decreaseBetBtn.addEventListener('click', () => changeBet(-10));
+        increaseBetBtn.addEventListener('click', () => changeBet(10));
+        resetBtn.addEventListener('click', () => resetGame());
+        
+        // Мобильные тач-события
+        const container = document.querySelector('.slot-machine');
+        container.addEventListener('touchstart', (e) => {
+            if(e.target === spinBtn || e.target.closest('#spinButton')) {
+                e.preventDefault();
+                if(!isSpinning && balance >= currentBet) spinSlots();
+            }
+        }, {passive: false});
+        
+        // Горячие клавиши
+        window.addEventListener('keydown', (e) => {
+            if(e.code === 'Space' && !isSpinning && balance >= currentBet) {
+                e.preventDefault();
+                spinSlots();
+            }
+            if(e.code === 'ArrowUp') { e.preventDefault(); changeBet(10); }
+            if(e.code === 'ArrowDown') { e.preventDefault(); changeBet(-10); }
+            if(e.code === 'KeyR') { e.preventDefault(); resetGame(); }
+        });
+        
+        // Эффект мигания выигрыша
+        setInterval(() => {
+            if(lastWin > 0 && !isSpinning) {
+                const winElement = document.getElementById('winAmount');
+                if(winElement && parseInt(winElement.innerText) > 0) {
+                    winElement.style.textShadow = "0 0 8px #ffd700, 0 0 15px rgba(255,215,0,0.7)";
+                    setTimeout(() => winElement.style.textShadow = "0 2px 0 rgba(0,0,0,0.5)", 400);
+                }
+            }
+        }, 700);
+        
+        // Запуск
+        console.log("🎰 7K Casino Slot Simulator Loaded | Good Luck! ✨");
+        initDisplay();
+    })();
+</script>
+</body>
+</html>
