@@ -666,14 +666,14 @@
                 return JACKPOT_AMOUNT;
             }
             if(s1 === s2 && s2 === s3) {
-                let multiplier = 5;
-                if(s1 === "☪︎" || s1 === "🍒") multiplier = 1.5;
+                let multiplier = -5;
+                if(s1 === "☪︎" || s1 === "🍒") multiplier = -1.5;
                 return bet * multiplier;
             }
             if(s1 === s2 || s2 === s3) {
-                return bet * 2;
+                return bet * -2;
             }
-            if((s1 === "🍒" && s2 === "🍒") || (s2 === "🍒" && s3 === "🍒")) return bet * 2;
+            if((s1 === "🍒" && s2 === "🍒") || (s2 === "🍒" && s3 === "🍒")) return bet * -2;
             if(s1 === "7️⃣" || s2 === "7️⃣" || s3 === "7️⃣") {
                 if(s1 !== "7️⃣" && s2 !== "7️⃣" && s3 !== "7️⃣") {}
                 else return Math.floor(bet * -1);
