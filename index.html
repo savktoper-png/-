@@ -2,278 +2,1327 @@
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, maximum-scale=1">
     <title>7K Casino | HORROR EDITION</title>
     <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Rajdhani:wght@400;600;700&family=Creepster&display=swap" rel="stylesheet">
     <style>
-        /* --- СБРОС И ОСНОВЫ --- */
-        * { box-sizing: border-box; margin: 0; padding: 0; user-select: none; -webkit-tap-highlight-color: transparent; }
-        body { font-family: 'Rajdhani', sans-serif; overflow: hidden; background: #000; color: #fff; }
+        * {
+            user-select: none;
+            -webkit-tap-highlight-color: transparent;
+            -webkit-touch-callout: none;
+            box-sizing: border-box;
+        }
 
-        /* --- ТЕМАТИКА --- */
         :root {
-            --blood: #8b0000;
-            --blood-bright: #cc0000;
-            --gold: #ffd700;
-            --purple: #6b1b6b;
-            --dark: #12121a;
+            --7k-gold: #ffd700;
+            --7k-gold-dark: #b8860b;
+            --7k-purple: #6b1b6b;
+            --7k-purple-dark: #3d0d3d;
+            --7k-black: #0a0a0f;
+            --7k-dark: #12121a;
+            --7k-glow: 0 0 20px rgba(255, 215, 0, 0.6), 0 0 40px rgba(107, 27, 107, 0.4);
+            --7k-red: #8b0000;
+            --7k-blood: #5a0000;
+            --7k-blood-bright: #cc0000;
         }
 
         body {
-            background:
-                radial-gradient(ellipse at top, #1a000a 0%, #0a0a0f 50%),
+            background: 
+                radial-gradient(ellipse at top, #1a000a 0%, var(--7k-black) 50%),
                 linear-gradient(135deg, #0f0005, #300010, #24000a);
-            display: grid;
-            grid-template-rows: auto 1fr 150px; /* Увеличиваем место для игр */
-            min-height: 120vh; /* Увеличиваем высоту сайта */
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-family: 'Rajdhani', 'Segoe UI', sans-serif;
+            margin: 0;
+            padding: 15px;
+            overflow-x: hidden;
+            position: relative;
+            touch-action: manipulation;
+        }
+
+        /* === КРОВАВЫЕ ПОДТЁКИ НА ФОНЕ === */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background-image: 
+                /* Капли крови по краям */
+                radial-gradient(ellipse 15px 80px at 5% 10%, rgba(139,0,0,0.8), transparent 70%),
+                radial-gradient(ellipse 10px 60px at 12% 25%, rgba(139,0,0,0.6), transparent 70%),
+                radial-gradient(ellipse 20px 100px at 95% 15%, rgba(139,0,0,0.9), transparent 70%),
+                radial-gradient(ellipse 12px 70px at 88% 35%, rgba(139,0,0,0.7), transparent 70%),
+                radial-gradient(ellipse 8px 50px at 3% 60%, rgba(139,0,0,0.5), transparent 70%),
+                radial-gradient(ellipse 15px 90px at 92% 70%, rgba(139,0,0,0.8), transparent 70%),
+                /* Разводы и брызги */
+                radial-gradient(circle 25px at 15% 45%, rgba(204,0,0,0.4), transparent 80%),
+                radial-gradient(circle 18px at 85% 55%, rgba(204,0,0,0.3), transparent 80%),
+                radial-gradient(circle 30px at 50% 85%, rgba(139,0,0,0.5), transparent 80%),
+                /* Мерцающие частицы */
+                radial-gradient(2px 2px at 20px 30px, var(--7k-gold), transparent),
+                radial-gradient(2px 2px at 40px 70px, rgba(255,215,0,0.3), transparent),
+                radial-gradient(2px 2px at 90px 40px, var(--7k-purple), transparent);
+            background-size: 200px 200px, 200px 200px, 200px 200px, 200px 200px, 200px 200px, 200px 200px, 300px 300px, 300px 300px, 400px 400px, 200px 200px;
+            animation: blood-drip 12s ease-in-out infinite, sparkle 8s linear infinite;
+            opacity: 0.7;
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        /* Анимация "стекающей" крови */
+        @keyframes blood-drip {
+            0%, 100% { 
+                background-position: 
+                    5% 10%, 12% 25%, 95% 15%, 88% 35%, 3% 60%, 92% 70%,
+                    15% 45%, 85% 55%, 50% 85%,
+                    0 0, 0 0, 0 0;
+            }
+            50% { 
+                background-position: 
+                    5% 15%, 12% 30%, 95% 20%, 88% 40%, 3% 65%, 92% 75%,
+                    15% 47%, 85% 57%, 50% 87%,
+                    200px 200px, 150px 100px, 100px 150px;
+            }
+        }
+
+        /* Дополнительные кровавые разводы через псевдо-элемент */
+        body::after {
+            content: '';
+            position: fixed;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: 
+                /* Длинные подтёки */
+                linear-gradient(180deg, transparent 0%, rgba(139,0,0,0.15) 30%, rgba(90,0,0,0.25) 60%, transparent 100%),
+                /* Виньетка с кровавым оттенком */
+                radial-gradient(ellipse at center, transparent 40%, rgba(90,0,0,0.4) 85%, rgba(40,0,0,0.7) 100%);
+            pointer-events: none;
+            z-index: 1;
+            animation: blood-pulse 8s ease-in-out infinite;
+        }
+
+        @keyframes blood-pulse {
+            0%, 100% { opacity: 0.7; }
+            50% { opacity: 0.85; }
+        }
+
+        @keyframes sparkle {
+            0% { background-position: 0 0, 0 0, 0 0, 0 0, 0 0, 0 0, 0 0, 0 0, 0 0, 0 0, 0 0, 0 0; }
+            100% { background-position: 200px 200px, 150px 100px, 100px 150px, 50px 50px, 180px 120px, 90px 200px, 0 0, 0 0, 0 0, 200px 200px, 150px 100px, 100px 150px; }
         }
 
         .casino-logo {
+            position: absolute;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%);
             font-family: 'Creepster', cursive;
             font-size: 3rem;
-            color: var(--blood-bright);
-            text-shadow: 0 0 25px var(--blood), 0 0 50px var(--purple);
-            text-align: center;
-            margin-top: 20px;
-            animation: flicker 3s ease-in-out infinite;
-        }
-        @keyframes flicker {
-            0%, 100% { opacity: 1; }
-            50% { opacity: 0.7; }
+            font-weight: 400;
+            color: var(--7k-blood-bright);
+            text-shadow: 
+                0 0 10px var(--7k-blood),
+                0 0 20px var(--7k-purple),
+                0 0 40px rgba(139, 0, 0, 0.9),
+                3px 3px 0 #000;
+            letter-spacing: 3px;
+            z-index: 10;
+            animation: logo-flicker 3s ease-in-out infinite;
+            pointer-events: none;
         }
 
-        /* --- СЛОТ-МАШИНА --- */
+        @keyframes logo-flicker {
+            0%, 100% { 
+                text-shadow: 0 0 10px var(--7k-blood), 0 0 20px var(--7k-purple), 3px 3px 0 #000;
+                opacity: 1;
+            }
+            45% { opacity: 1; }
+            47% { opacity: 0.8; text-shadow: 0 0 5px var(--7k-blood), 3px 3px 0 #000; }
+            49% { opacity: 1; }
+            50% { opacity: 0.3; text-shadow: none; }
+            52% { opacity: 1; text-shadow: 0 0 15px var(--7k-blood-bright), 0 0 30px var(--7k-blood), 3px 3px 0 #000; }
+        }
+
+        .casino-logo span {
+            color: var(--7k-gold);
+            text-shadow: 0 0 15px var(--7k-gold), 3px 3px 0 #000;
+        }
+
         .slot-machine {
             background: linear-gradient(145deg, rgba(40,10,20,0.95), rgba(25,8,15,0.98));
             border-radius: 60px 60px 40px 40px;
-            padding: 35px 30px 40px;
-            box-shadow: var(--gold) 0 25px 50px, inset 1px 1px 3px rgba(255,255,255,0.1);
+            padding: 35px 30px 40px 30px;
+            box-shadow: 
+                var(--7k-glow),
+                0 25px 50px rgba(0,0,0,0.9),
+                inset 0 1px 0 rgba(255,255,255,0.05),
+                0 0 60px rgba(139, 0, 0, 0.3);
             border: 3px solid transparent;
-            border-image: linear-gradient(45deg, var(--blood), var(--purple), var(--blood)) 1;
+            border-image: linear-gradient(45deg, var(--7k-blood), var(--7k-purple), var(--7k-blood)) 1;
             position: relative;
-            max-width: 620px;
-            width: 95%;
-            margin: auto;
+            z-index: 5;
+            max-width: 520px;
+            width: 100%;
+        }
+
+        .slot-machine::before {
+            content: '7K';
+            position: absolute;
+            top: -15px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: linear-gradient(45deg, var(--7k-blood-bright), #fff, var(--7k-blood));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            font-family: 'Creepster', cursive;
+            font-weight: 400;
+            font-size: 2rem;
+            text-shadow: 0 2px 10px rgba(0,0,0,0.7), 0 0 20px var(--7k-blood);
+            padding: 5px 25px;
+            border-radius: 30px;
+            border: 2px solid var(--7k-blood-bright);
+            box-shadow: 0 4px 15px rgba(139, 0, 0, 0.6), 0 0 30px rgba(204, 0, 0, 0.4);
+            pointer-events: none;
+            animation: badge-glow 2s ease-in-out infinite;
+        }
+
+        @keyframes badge-glow {
+            0%, 100% { box-shadow: 0 4px 15px rgba(139, 0, 0, 0.6), 0 0 30px rgba(204, 0, 0, 0.4); }
+            50% { box-shadow: 0 4px 15px rgba(139, 0, 0, 0.8), 0 0 50px rgba(204, 0, 0, 0.8); }
         }
 
         .display-area {
-             background: linear-gradient(180deg, #111, #222);
-             border-radius: 45px;
-             padding: 25px 20px;
-             box-shadow:
-                 inset 0 2px 10px rgba(0,0,0,0.7),
-                 inset 0 -2px 10px rgba(107, 27, 107, 0.4),
-                 0 8px 25px rgba(0,0,0,0.6),
-                 inset 0 0 40px rgba(139, 0, 0, 0.15);
-             border: 2px solid rgba(204, 0, 0, 0.3);
-             position: relative;
-         }
+            background: linear-gradient(180deg, #0d0508 0%, #150a10 100%);
+            border-radius: 45px;
+            padding: 25px 20px;
+            box-shadow: 
+                inset 0 2px 10px rgba(0,0,0,0.7),
+                inset 0 -2px 10px rgba(107, 27, 107, 0.4),
+                0 8px 25px rgba(0,0,0,0.6),
+                inset 0 0 40px rgba(139, 0, 0, 0.15);
+            border: 2px solid rgba(204, 0, 0, 0.3);
+            position: relative;
+        }
 
-         .reels-container {
-             display: flex;
-             justify-content: center;
-             gap: 15px;
-             margin-bottom: 25px;
-         }
+        /* Кровавые подтёки внутри слот-машины */
+        .display-area::before {
+            content: '';
+            position: absolute;
+            top: -10px; left: 20px; right: 20px;
+            height: 20px;
+            background: 
+                radial-gradient(ellipse 8px 30px at 10% 100%, rgba(139,0,0,0.6), transparent 80%),
+                radial-gradient(ellipse 6px 25px at 35% 100%, rgba(139,0,0,0.4), transparent 80%),
+                radial-gradient(ellipse 10px 35px at 70% 100%, rgba(139,0,0,0.7), transparent 80%),
+                radial-gradient(ellipse 7px 28px at 90% 100%, rgba(139,0,0,0.5), transparent 80%);
+            pointer-events: none;
+            z-index: 1;
+        }
 
-         .reel {
-             background: linear-gradient(145deg, #1a0f15, #0f0a0d);
-             border-radius: 25px;
-             padding: 12px 8px;
-             box-shadow:
-                 inset 0 0 0 2px var(--blood),
-                 inset 0 0 20px rgba(139, 0, 0, 0.5),
-                 0 8px 25px rgba(0,0,0,0.7);
-         }
+        .display-area::after {
+            content: '';
+            position: absolute;
+            bottom: -10px; left: 20px; right: 20px;
+            height: 20px;
+            background: 
+                radial-gradient(ellipse 8px 30px at 10% 0%, rgba(139,0,0,0.5), transparent 80%),
+                radial-gradient(ellipse 6px 25px at 45% 0%, rgba(139,0,0,0.3), transparent 80%),
+                radial-gradient(ellipse 10px 35px at 80% 0%, rgba(139,0,0,0.6), transparent 80%);
+            pointer-events: none;
+            z-index: 1;
+        }
 
-         canvas {
-             display: block;
-             margin: auto;
-             background: linear-gradient(145deg, #fff8e6, #ffe8c8);
-             border-radius: 22px;
-             box-shadow:
-                 inset 0 0 0 3px #8b0000,
-                 inset 0 0 15px rgba(0,0,0,0.3),
-                 0 5px 15px rgba(0,0,0,0.5);
-             width: 128px;
-             height: 128px;
-         }
+        .reels-container {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            flex-wrap: wrap;
+            margin-bottom: 25px;
+            position: relative;
+        }
 
-         .info-panel {
-             display: flex;
-             justify-content: space-between;
-             flex-wrap: wrap;
-             gap: 12px;
-         }
+        .reels-container::before,
+        .reels-container::after {
+            content: '☠';
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--7k-blood-bright);
+            font-size: 2rem;
+            text-shadow: 0 0 10px var(--7k-blood), 0 0 20px rgba(139,0,0,0.7);
+            opacity: 0.8;
+            z-index: 1;
+            pointer-events: none;
+            animation: skull-pulse 2s ease-in-out infinite;
+        }
+        @keyframes skull-pulse {
+            0%, 100% { opacity: 0.6; text-shadow: 0 0 10px var(--7k-blood); }
+            50% { opacity: 1; text-shadow: 0 0 20px var(--7k-blood-bright), 0 0 40px rgba(139,0,0,0.9); }
+        }
+        .reels-container::before { left: -25px; }
+        .reels-container::after { right: -25px; }
 
-         .balance-box, .bet-box, .win-box {
-             background: linear-gradient(145deg, #1a0f15, #0f0a0d);
-             padding: 12px;
-             border-radius: 45px;
-             font-weight: bold;
-             font-size: 1.4rem;
-             color: #fff;
-         }
+        .reel {
+            background: linear-gradient(145deg, #1a0f15, #0f0a0d);
+            border-radius: 25px;
+            padding: 10px 6px;
+            box-shadow: 
+                inset 0 0 0 2px var(--7k-blood),
+                inset 0 0 20px rgba(139, 0, 0, 0.5),
+                0 8px 25px rgba(0,0,0,0.7);
+            transition: all 0.15s ease;
+            position: relative;
+            overflow: hidden;
+        }
 
-         .spin-btn {
-             background-image:
-                 linear-gradient(to bottom, #cc0000, #8b0000),
-                 linear-gradient(to bottom, #ffd700, #b886);
-             background-origin: border-box;
-             background-clip: content-box, padding-box;
-             border-radius: 65px;
-         }
+        .reel::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0; height: 3px;
+            background: linear-gradient(90deg, transparent, var(--7k-blood-bright), transparent);
+            animation: scanline 3s linear infinite;
+            pointer-events: none;
+        }
 
-         /* --- КНОПКА ЗВУКА --- */
-         .sound-toggle {
+        @keyframes scanline {
+            0% { top: -100%; }
+            100% { top: 100%; }
+        }
+
+        canvas {
+            display: block;
+            margin: 0 auto;
+            background: linear-gradient(145deg, #fff0e6, #ffe0c8);
+            border-radius: 22px;
+            box-shadow: 
+                inset 0 0 0 3px #8b0000,
+                inset 0 0 15px rgba(0,0,0,0.3),
+                0 5px 15px rgba(0,0,0,0.5);
+            width: 115px;
+            height: 115px;
+            position: relative;
+            touch-action: none;
+        }
+
+        canvas::after {
+            content: '';
+            position: absolute;
+            top: 5px; left: 5px; right: 5px; bottom: 5px;
+            border-radius: 18px;
+            border: 2px solid rgba(139, 0, 0, 0.4);
+            pointer-events: none;
+        }
+
+        .info-panel {
+            background: linear-gradient(135deg, rgba(40,15,25,0.95), rgba(30,10,18,0.98));
+            backdrop-filter: blur(12px);
+            border-radius: 55px;
+            margin-top: 22px;
+            padding: 18px 22px;
+            display: flex;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 12px;
+            border: 2px solid rgba(204, 0, 0, 0.4);
+            box-shadow: 0 5px 20px rgba(0,0,0,0.5), inset 0 0 30px rgba(139, 0, 0, 0.2);
+        }
+
+        .balance-box, .bet-box, .win-box {
+            background: linear-gradient(145deg, #1a0f15, #0f0a0d);
+            padding: 10px 22px;
+            border-radius: 45px;
+            font-weight: 700;
+            font-size: 1.4rem;
+            color: #fff;
+            text-shadow: 0 2px 0 rgba(0,0,0,0.6);
+            font-family: 'Orbitron', monospace;
+            letter-spacing: 1px;
+            border: 1px solid rgba(204, 0, 0, 0.5);
+            box-shadow: 0 3px 10px rgba(0,0,0,0.4), inset 0 0 15px rgba(139, 0, 0, 0.3);
+            min-width: 140px;
+            text-align: center;
+            transition: all 0.2s ease;
+            cursor: pointer;
+        }
+
+        .balance-box:active, .bet-box:active, .win-box:active {
+            transform: scale(0.98);
+        }
+
+        .balance-box span, .bet-box span, .win-box span {
+            font-size: 0.8rem;
+            color: var(--7k-blood-bright);
+            margin-right: 6px;
+            font-family: 'Rajdhani', sans-serif;
+            font-weight: 600;
+        }
+
+        .jackpot-light {
+            background: linear-gradient(45deg, var(--7k-blood), var(--7k-blood-bright), var(--7k-blood));
+            background-size: 200% 200%;
+            animation: gradient-shift 2s ease infinite;
+            border-radius: 45px;
+            padding: 8px 20px;
+            font-size: 1.05rem;
+            font-weight: 800;
+            text-align: center;
+            color: #000;
+            font-family: 'Creepster', cursive;
+            text-shadow: 0 1px 0 rgba(255,255,255,0.2), 0 0 10px rgba(0,0,0,0.5);
+            box-shadow: 0 4px 15px rgba(139, 0, 0, 0.6), 0 0 25px rgba(204, 0, 0, 0.5);
+            min-width: 180px;
+            border: 2px solid #fff;
+            cursor: pointer;
+        }
+
+        @keyframes gradient-shift {
+            0%, 100% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+        }
+
+        .controls {
+            display: flex;
+            gap: 14px;
+            justify-content: center;
+            margin-top: 22px;
+            flex-wrap: wrap;
+        }
+
+        button {
+            background: linear-gradient(to bottom, #8b0000, #5a0000);
+            border: none;
+            font-size: 1.15rem;
+            font-weight: 700;
+            padding: 12px 24px;
+            border-radius: 50px;
+            color: #ffd700;
+            cursor: pointer;
+            transition: all 0.1s ease;
+            box-shadow: 0 6px 0 #3a0000, 0 8px 20px rgba(0,0,0,0.5), 0 0 15px rgba(139, 0, 0, 0.4);
+            font-family: 'Rajdhani', sans-serif;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            position: relative;
+            overflow: hidden;
+            touch-action: manipulation;
+            -webkit-appearance: none;
+            appearance: none;
+        }
+
+        button::before {
+            content: '';
+            position: absolute;
+            top: 0; left: -100%;
+            width: 100%; height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,215,0,0.3), transparent);
+            transition: left 0.4s ease;
+            pointer-events: none;
+        }
+
+        button:hover::before,
+        button:active::before {
+            left: 100%;
+        }
+
+        button:active {
+            transform: translateY(4px) !important;
+            box-shadow: 0 2px 0 #3a0000, 0 4px 10px rgba(0,0,0,0.5) !important;
+        }
+
+        button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 0 #3a0000, 0 12px 25px rgba(139, 0, 0, 0.6), 0 0 25px rgba(204, 0, 0, 0.5);
+        }
+
+        .spin-btn {
+            background: linear-gradient(to bottom, #cc0000, #8b0000, #5a0000);
+            font-size: 1.5rem;
+            padding: 12px 45px;
+            box-shadow: 
+                0 7px 0 #3a0000,
+                0 0 25px rgba(204, 0, 0, 0.7),
+                0 10px 30px rgba(0,0,0,0.6),
+                0 0 40px rgba(139, 0, 0, 0.5);
+            font-family: 'Creepster', cursive;
+            letter-spacing: 3px;
+            animation: glow-pulse 1.5s ease-in-out infinite;
+            color: #fff;
+            text-shadow: 0 2px 0 #000, 0 0 10px rgba(0,0,0,0.8);
+        }
+
+        @keyframes glow-pulse {
+            0%, 100% { 
+                box-shadow: 0 7px 0 #3a0000, 0 0 25px rgba(204, 0, 0, 0.7), 0 10px 30px rgba(0,0,0,0.6), 0 0 40px rgba(139, 0, 0, 0.5); 
+            }
+            50% { 
+                box-shadow: 0 7px 0 #3a0000, 0 0 45px rgba(204, 0, 0, 1), 0 10px 40px rgba(0,0,0,0.7), 0 0 60px rgba(139, 0, 0, 0.8); 
+            }
+        }
+
+        .spin-btn:hover {
+            animation: none;
+            box-shadow: 0 9px 0 #3a0000, 0 0 60px rgba(204, 0, 0, 1), 0 15px 40px rgba(204, 0, 0, 0.7), 0 0 80px rgba(139, 0, 0, 0.9);
+        }
+
+        #resetGame {
+            background: linear-gradient(to bottom, #6b1b6b, #3d0d3d);
+            color: #fff;
+            box-shadow: 0 6px 0 #2a052a, 0 8px 20px rgba(107, 27, 107, 0.6);
+        }
+
+        #resetGame:hover {
+            box-shadow: 0 8px 0 #2a052a, 0 12px 25px rgba(107, 27, 107, 0.8), 0 0 20px rgba(107, 27, 107, 0.5);
+        }
+
+        button:disabled {
+            opacity: 0.5;
+            transform: none !important;
+            cursor: not-allowed;
+            filter: grayscale(0.4);
+            box-shadow: 0 4px 0 #333 !important;
+        }
+
+        .rules-footer {
+            text-align: center;
+            margin-top: 18px;
+            font-size: 0.7rem;
+            color: #7a4a4a;
+            background: rgba(40, 15, 25, 0.7);
+            padding: 8px 12px;
+            border-radius: 25px;
+            border: 1px solid rgba(204, 0, 0, 0.25);
+            line-height: 1.3;
+        }
+
+        .rules-footer strong {
+            color: var(--7k-blood-bright);
+            font-family: 'Creepster', cursive;
+            font-size: 1.1em;
+        }
+
+        .win-animation {
+            animation: win-flash 0.2s ease 5;
+        }
+
+        @keyframes win-flash {
+            0%, 100% { box-shadow: inset 0 0 0 2px var(--7k-blood); }
+            50% { box-shadow: inset 0 0 30px var(--7k-blood-bright), 0 0 40px rgba(204, 0, 0, 0.9); }
+        }
+
+        /* === СКРИМЕР === */
+        .screamer-overlay {
             position: fixed;
-            bottom: calc(16vh + calc(var(--vh, 1vh) * -7)); /* Позиция над играми */
-            right: calc(var(--vw, 1vw) * -7);
-            width: calc(var(--vw, 1vw) * -7);
-            height: calc(var(--vw, -7vw));
-            border-radius: calc(var(--vw, -7vw));
-            background-image:
-                linear-gradient(to bottom right, var(--blood), var(--purple)),
-                linear-gradient(to bottom right, var(--gold), transparent);
-            background-origin: border-box;
-            background-clip: content-box, padding-box;
-            border-color:#fff transparent transparent #fff;
-            border-width:.3em .3em .7em .3em;
-            border-style:solid solid solid solid;
-            color:#fff; font-size:.9em; line-height:.9em; text-align:center; padding-top:.3em; box-shadow:#fff -.3em -.3em .7em inset,#fff .3em .3em .7em inset,#fff -.3em -.3em .7em,#fff .3em .3em .7em,#fff -.3em -.3em calc(.7em + .3em),#fff .3em .3em calc(.7em + .3em);
-         }
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: #000;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            z-index: 9999;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.03s;
+        }
+
+        .screamer-overlay.active {
+            opacity: 1;
+            pointer-events: all;
+            animation: screamer-flash 0.08s steps(1) infinite;
+        }
+
+        @keyframes screamer-flash {
+            0%, 100% { background: #000; }
+            50% { background: #3a0000; }
+        }
+
+        .screamer-face {
+            font-size: clamp(70px, 22vw, 160px);
+            animation: screamer-shake 0.04s ease-in-out infinite;
+            text-shadow: 0 0 40px #ff0000, 0 0 80px #8b0000, 0 0 120px #5a0000;
+            filter: drop-shadow(0 0 30px #ff0000);
+        }
+
+        @keyframes screamer-shake {
+            0%, 100% { transform: translate(0, 0) rotate(0deg) scale(1); }
+            20% { transform: translate(-8px, 5px) rotate(-3deg) scale(1.03); }
+            40% { transform: translate(6px, -7px) rotate(4deg) scale(0.97); }
+            60% { transform: translate(-4px, 4px) rotate(-2deg) scale(1.02); }
+            80% { transform: translate(3px, -3px) rotate(2deg) scale(0.99); }
+        }
+
+        .screamer-text {
+            color: #fff;
+            font-family: 'Creepster', cursive;
+            font-size: clamp(18px, 4.5vw, 36px);
+            font-weight: 400;
+            text-align: center;
+            margin-top: 15px;
+            text-shadow: 0 0 15px #ff0000, 0 0 30px #8b0000;
+            animation: text-flicker 0.08s infinite;
+            line-height: 1.2;
+        }
+
+        @keyframes text-flicker {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.6; }
+        }
+
+        .screamer-close {
+            margin-top: 25px;
+            padding: 12px 35px;
+            background: var(--7k-blood);
+            color: #fff;
+            border: 3px solid var(--7k-blood-bright);
+            border-radius: 50px;
+            font-family: 'Creepster', cursive;
+            font-size: 1.3rem;
+            font-weight: 400;
+            cursor: pointer;
+            animation: pulse-red 0.25s ease-in-out infinite;
+            touch-action: manipulation;
+            text-shadow: 0 2px 0 #000;
+        }
+
+        @keyframes pulse-red {
+            0%, 100% { box-shadow: 0 0 25px var(--7k-blood), 0 0 50px rgba(139,0,0,0.6); }
+            50% { box-shadow: 0 0 45px var(--7k-blood-bright), 0 0 80px rgba(204,0,0,0.9); }
+        }
+
+        /* === КНОПКА ВЫКЛЮЧЕНИЯ ЗВУКА === */
+        .sound-toggle {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background: linear-gradient(145deg, var(--7k-blood), var(--7k-blood-dark));
+            border: 2px solid var(--7k-blood-bright);
+            color: #fff;
+            font-size: 1.5rem;
+            cursor: pointer;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.5), 0 0 20px rgba(139,0,0,0.5);
+            z-index: 100;
+            transition: all 0.2s ease;
+            touch-action: manipulation;
+        }
+
+        .sound-toggle:hover {
+            transform: scale(1.1);
+            box-shadow: 0 6px 20px rgba(0,0,0,0.6), 0 0 35px rgba(204,0,0,0.7);
+        }
+
+        .sound-toggle.muted::after {
+            content: '🔇';
+        }
+        .sound-toggle:not(.muted)::after {
+            content: '🔊';
+        }
+
+        /* === Уведомления === */
+        .notification {
+            position: fixed;
+            top: 80px;
+            left: 50%;
+            transform: translateX(-50%) translateY(-100px);
+            background: linear-gradient(135deg, var(--7k-purple-dark), #1a0510);
+            color: var(--7k-blood-bright);
+            padding: 15px 30px;
+            border-radius: 50px;
+            font-family: 'Orbitron', monospace;
+            font-weight: 700;
+            font-size: 1.1rem;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.7), 0 0 30px rgba(139, 0, 0, 0.6);
+            border: 2px solid var(--7k-blood-bright);
+            z-index: 100;
+            transition: transform 0.4s ease;
+            text-align: center;
+            max-width: 90vw;
+            pointer-events: none;
+        }
+
+        .notification.show {
+            transform: translateX(-50%) translateY(0);
+        }
+
+        .notification.jackpot {
+            animation: jackpot-bounce 0.6s ease;
+            background: linear-gradient(45deg, var(--7k-blood), var(--7k-blood-bright), #ffd700);
+            color: #000;
+            font-size: 1.3rem;
+            text-shadow: 0 2px 0 rgba(255,255,255,0.2);
+            font-family: 'Creepster', cursive;
+        }
+
+        @keyframes jackpot-bounce {
+            0%, 100% { transform: translateX(-50%) translateY(0) scale(1); }
+            25% { transform: translateX(-50%) translateY(-10px) scale(1.05); }
+            50% { transform: translateX(-50%) translateY(0) scale(1); }
+            75% { transform: translateX(-50%) translateY(-5px) scale(1.02); }
+        }
+
+        .decoration {
+            position: absolute;
+            font-size: 1.5rem;
+            opacity: 0.5;
+            pointer-events: none;
+            animation: float 7s ease-in-out infinite;
+            color: var(--7k-blood-bright);
+            text-shadow: 0 0 10px var(--7k-blood);
+        }
+        .dec-1 { top: 15%; left: 5%; animation-delay: 0s; }
+        .dec-2 { top: 25%; right: 8%; animation-delay: 1.5s; font-size: 1.3rem; }
+        .dec-3 { bottom: 20%; left: 10%; animation-delay: 3s; }
+        .dec-4 { bottom: 15%; right: 5%; animation-delay: 0.8s; font-size: 1.4rem; }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0) rotate(0deg); opacity: 0.4; }
+            50% { transform: translateY(-20px) rotate(8deg); opacity: 0.7; }
+        }
+
+        /* Адаптивность */
+        @media (max-width: 600px) {
+            .casino-logo { font-size: 2.3rem; top: 12px; }
+            .slot-machine { padding: 25px 20px 30px; border-radius: 50px 50px 35px 35px; }
+            .reels-container { gap: 10px; }
+            .reels-container::before, .reels-container::after { display: none; }
+            canvas { width: 95px; height: 95px; }
+            .balance-box, .bet-box, .win-box { font-size: 1.1rem; padding: 8px 16px; min-width: 120px; }
+            button { font-size: 0.95rem; padding: 10px 18px; }
+            .spin-btn { font-size: 1.25rem; padding: 10px 35px; }
+            .jackpot-light { font-size: 0.95rem; padding: 6px 15px; min-width: 160px; }
+            .rules-footer { font-size: 0.65rem; padding: 6px 10px; }
+            .sound-toggle { width: 45px; height: 45px; font-size: 1.3rem; bottom: 15px; right: 15px; }
+        }
+
+        @media (max-width: 400px) {
+            .info-panel { flex-direction: column; align-items: center; }
+            .balance-box, .bet-box, .win-box, .jackpot-light { width: 100%; max-width: 280px; }
+            .controls { flex-direction: column; align-items: center; }
+            button, .spin-btn { width: 100%; max-width: 280px; }
+        }
     </style>
 </head>
 <body>
-    <div class="casino-logo">7<span style="color:#ffd700;">K</span> CASINO</div>
+    <!-- Декоративные элементы (ужас) -->
+    <div class="decoration dec-1">🩸</div>
+    <div class="decoration dec-2">👁️</div>
+    <div class="decoration dec-3">💀</div>
+    <div class="decoration dec-4">🕯️</div>
 
-    <!-- СЛОТ-МАШИНА -->
+    <!-- Логотип -->
+    <div class="casino-logo">7<span>K</span> CASINO</div>
+
+    <!-- Уведомления -->
+    <div class="notification" id="notification"></div>
+
+    <!-- СКРИМЕР -->
+    <div class="screamer-overlay" id="screamer">
+        <div class="screamer-face">😱👹🩸💀🔪</div>
+        <div class="screamer-text">ТЫ ВЫИГРАЛ...<br>НО ОНИ ТЕПЕРЬ ЗНАЮТ... 🔥</div>
+        <button class="screamer-close" id="screamerClose">ЗАБРАТЬ И БЕЖАТЬ</button>
+    </div>
+
+    <!-- Кнопка звука -->
+    <button class="sound-toggle" id="soundToggle" title="Вкл/Выкл звук"></button>
+
+    <!-- Основной контейнер -->
     <div class="slot-machine">
-         <div class="display-area">
-              <div class="reels-container" id="reelsContainer">
-                <div class="reel"><canvas id="reel_1" width="128" height="128"></canvas></div>
-                <div class="reel"><canvas id="reel_2" width="128" height="128"></canvas></div>
-                <div class="reel"><canvas id="reel_3" width="128" height="128"></canvas></div>
-              </div>
-              <div class="info-panel">
-                  <div class="balance-box"><span>🩸 БАЛАНС</span><span id="balanceAmount">1599</span></div>
-                  <div class="bet-box"><span>💀 СТАВКА</span><span id="betAmount">5</span></div>
-                  <div class="win-box"><span>👁️ ВЫИГРЫШ</span><span id="winAmount">$</span></div>
-                  <button class="jackpot-light" id="jackpotIndicator">🔥 ДЖЕКПОТ 🔥</button>
-              </div>
-              <div class="controls">
-                  <button id="decreaseBet">− СТАВКА</button>
-                  <button id="increaseBet">+ СТАВКА</button>
-                  <button id="spinButton" class="spin-btn">🩸 RISK SPIN 🩸</button>
-                  <button id="resetGame">🔄 СБРОС</button>
-              </div>
-              <p class="rules-footer">
-                  <strong>ПРАВИЛА:</strong> Шанс победы ~8% | <br>3×💀 = ДЖЕКПОТ | <br>3×🍒 = ×7 | <br>2×совпадения = ×2 | <br><em>Казино всегда голодно... 🩸</em>
-              </p>
-          </div>
-      </div>
+        <div class="display-area">
+            <div class="reels-container" id="reelsContainer">
+                <div class="reel"><canvas id="reel0" width="120" height="120"></canvas></div>
+                <div class="reel"><canvas id="reel1" width="120" height="120"></canvas></div>
+                <div class="reel"><canvas id="reel2" width="120" height="120"></canvas></div>
+            </div>
 
-      <!-- КНОПКА ЗВУКА -->
-      <button id="soundToggle" class="sound-toggle">🔊</button>
+            <div class="info-panel">
+                <div class="balance-box"><span>🩸 БАЛАНС</span><span id="balanceAmount">1000</span></div>
+                <div class="bet-box"><span>💀 СТАВКА</span><span id="betAmount">50</span></div>
+                <div class="win-box"><span>👁️ ВЫИГРЫШ</span><span id="winAmount">0</span></div>
+                <div class="jackpot-light" id="jackpotIndicator">🔥 ДЖЕКПОТ: 5000 🔥</div>
+            </div>
+
+            <div class="controls">
+                <button id="decreaseBet">− СТАВКА</button>
+                <button id="increaseBet">+ СТАВКА</button>
+                <button id="spinButton" class="spin-btn">🩸 RISK SPIN 🩸</button>
+                <button id="resetGame">🔄 СБРОС</button>
+            </div>
+            
+            <div class="rules-footer">
+                <strong>ПРАВИЛА 7K:</strong> Шанс победы ~8% | 3×7️⃣ = ДЖЕКПОТ 5000 | 3×🍒 = ×7 | 2×совпадения = ×2 | <em>Казино всегда голодно... 🩸</em>
+            </div>
+        </div>
+    </div>
 
 <script>
-// --- ГЛОБАЛЬНЫЕ ПЕРЕМЕННЫЕ ---
-let audioCtx = null;
-let bgMusic = null;
-let spinSound = null;
-let isMuted = false;
-const SYMBOLS = ["🍋", "🍊", "🍇", "🔔", "⭐", "🍒", "💀"];
-// ... [ПЕРЕМЕННЫЕ ДЛЯ СЛОТОВ] ...
-
-// --- ИНИЦИАЛИЗАЦИЯ АУДИО ---
-function initAudio() {
-    if (audioCtx) return;
-    try {
-        audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+    (function(){
+        // ========== НАСТРОЙКИ "ЧЕСТНОЙ" МАТЕМАТИКИ 😈 ==========
+        const SYMBOLS = ["🍋", "🍊", "🍇", "🔔", "⭐", "🍒", "7️⃣"];
+        const SYMBOL_WEIGHTS = [38, 32, 26, 18, 12, 3, 1]; // 7️⃣ = 1 из ~130
         
-        // Фоновая музыка (бесконечный цикл)
-        bgMusic = audioCtx.createBufferSource();
-        const request = new XMLHttpRequest();
-        request.open('GET', 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3', true); // Бесплатная музыка
-        request.responseType = 'arraybuffer';
+        let weightedPool = [];
+        for(let i=0; i<SYMBOLS.length; i++) {
+            for(let w=0; w<SYMBOL_WEIGHTS[i]; w++) {
+                weightedPool.push(SYMBOLS[i]);
+            }
+        }
         
-        request.onload = function() {
-           audioCtx.decodeAudioData(request.response, function(buffer) {
-                bgMusic.buffer = buffer;
-                bgMusic.loop = true;
-                bgMusic.connect(audioCtx.destination);
-                bgMusic.start(0);
-           });
-       };
-       request.send();
-       
-       // Звук вращения (короткий эффект)
-       const spinRequest = new XMLHttpRequest();
-       spinRequest.open('GET', 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-9.mp3', true); // Другой звук
-       spinRequest.responseType = 'arraybuffer';
-       
-       spinRequest.onload = function() {
-           audioCtx.decodeAudioData(spinRequest.response, function(buffer) {
-               spinSound = buffer;
-           });
-       };
-       spinRequest.send();
-       
-    } catch (e) {}
-}
-
-// --- ФУНКЦИЯ ВОСПРОИЗВЕДЕНИЯ ЗВУКА ВРАЩЕНИЯ ---
-function playSpinSound() {
-    if (!audioCtx || isMuted || !spinSound) return;
-    const source = audioCtx.createBufferSource();
-    source.buffer = spinSound;
-    source.connect(audioCtx.destination);
-    source.start(0);
-}
-
-
-// --- ЛОГИКА СЛОТ-МАШИНЫ (сокращенная версия) ---
-// ... [КОД ЛОГИКИ СЛОТОВ ИЗ ПРЕДЫДУЩЕГО ОТВЕТА] ...
-// В функции spinSlots() ДОБАВЬ ВЫЗОВ:
-// playSpinSound();
-
-
-// --- КНОПКА ЗВУКА ---
-document.getElementById('soundToggle').addEventListener('click', () => {
-   isMuted = !isMuted;
-   this.textContent = isMuted ? '🔇' : '🔊';
-   if(audioCtx){
-       bgMusic.gain.value = isMuted ? 0 : (localStorage.getItem('musicVolume') || .8);
-   }
-   this.classList.toggle('muted', isMuted);
-});
-
-document.addEventListener('DOMContentLoaded', () => {
-   initAudio(); // Запуск аудио при загрузке страницы
-});
-<!-- МИНИ-ИГРЫ -->
-<div class="mini-games">
-    
-    <!-- ЗМЕЙКА -->
-    <div class="game-panel">
-        <h3 style="text-align:center;">🐍 ЗМЕЙКА</h3>
-        <canvas id="snakeCanvas" width="360" height="480"></canvas>
-    </div>
-    
-    <!-- ТЕТРИС -->
-    <div class="game-panel">
-         <h3 style="text-align:center;">🧱 ТЕТРИС</h3>
-         <canvas id="tetrisCanvas" width="360" height="480"></canvas>
-     </div>
-     
-     <!-- САПЕР -->
-     <div class="game-panel">
-         <h3 style="text-align:center;">💣 САПЕР</h3>
-         <canvas id="minesweeperCanvas" width="360" height="480"></canvas>
-     </div>
- </div>
- 
-<script src="/path/to/body.js"></script> <!-- Если вынести логику в отдельный файл -->
+        function getRandomSymbol() {
+            return weightedPool[Math.floor(Math.random() * weightedPool.length)];
+        }
+        
+        // === HOUSE EDGE ===
+        const HOUSE_EDGE_CHANCE = 0.18; // 18% шанс "обнулить" выигрыш
+        
+        function applyHouseEdge(baseWin, bet) {
+            if(baseWin > 0 && Math.random() < HOUSE_EDGE_CHANCE) return 0;
+            if(baseWin === JACKPOT_AMOUNT && Math.random() < 0.04) return Math.floor(bet * 0.3);
+            return baseWin;
+        }
+        
+        // Игровые переменные
+        let balance = 1000;
+        let currentBet = 50;
+        let lastWin = 0;
+        let isSpinning = false;
+        let spinInterval = null;
+        let currentSymbols = ["🍋", "🍋", "🍋"];
+        const JACKPOT_AMOUNT = 5000;
+        
+        // DOM
+        const balanceSpan = document.getElementById('balanceAmount');
+        const betSpan = document.getElementById('betAmount');
+        const winSpan = document.getElementById('winAmount');
+        const spinBtn = document.getElementById('spinButton');
+        const decreaseBetBtn = document.getElementById('decreaseBet');
+        const increaseBetBtn = document.getElementById('increaseBet');
+        const resetBtn = document.getElementById('resetGame');
+        const jackpotIndicator = document.getElementById('jackpotIndicator');
+        const notification = document.getElementById('notification');
+        const screamer = document.getElementById('screamer');
+        const screamerClose = document.getElementById('screamerClose');
+        const soundToggle = document.getElementById('soundToggle');
+        
+        // Canvas
+        const canvas0 = document.getElementById('reel0');
+        const canvas1 = document.getElementById('reel1');
+        const canvas2 = document.getElementById('reel2');
+        const ctx0 = canvas0.getContext('2d');
+        const ctx1 = canvas1.getContext('2d');
+        const ctx2 = canvas2.getContext('2d');
+        
+        // === АУДИО СИСТЕМА ===
+        let audioCtx = null;
+        let bgMusicOscillators = [];
+        let bgMusicGain = null;
+        let isMuted = false;
+        let isMusicPlaying = false;
+        
+        function initAudio() {
+            if(audioCtx) return;
+            try {
+                audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+                setupBackgroundMusic();
+            } catch(e) {
+                console.log('Audio not supported');
+            }
+        }
+        
+        // === ЗЛОВЕЩАЯ ФОНОВАЯ МУЗЫКА ===
+        function setupBackgroundMusic() {
+            if(!audioCtx) return;
+            
+            // Мастер-гейн для музыки
+            bgMusicGain = audioCtx.createGain();
+            bgMusicGain.gain.value = isMuted ? 0 : 0.08;
+            bgMusicGain.connect(audioCtx.destination);
+            
+            // Низкий дрон (основа атмосферы)
+            const drone = audioCtx.createOscillator();
+            drone.type = 'sine';
+            drone.frequency.setValueAtTime(45, audioCtx.currentTime); // Очень низкий тон
+            drone.connect(bgMusicGain);
+            drone.start();
+            bgMusicOscillators.push(drone);
+            
+            // Диссонансный слой
+            const dissonant = audioCtx.createOscillator();
+            dissonant.type = 'triangle';
+            dissonant.frequency.setValueAtTime(47.5, audioCtx.currentTime); // Полутон выше = диссонанс
+            const dissonantGain = audioCtx.createGain();
+            dissonantGain.gain.value = 0.03;
+            dissonant.connect(dissonantGain);
+            dissonantGain.connect(bgMusicGain);
+            dissonant.start();
+            bgMusicOscillators.push(dissonant);
+            
+            // Периодические "удары сердца"
+            function heartbeat() {
+                if(!isMusicPlaying || isMuted) {
+                    setTimeout(heartbeat, 2000);
+                    return;
+                }
+                
+                const heartOsc = audioCtx.createOscillator();
+                const heartGain = audioCtx.createGain();
+                
+                heartOsc.type = 'sine';
+                heartOsc.frequency.setValueAtTime(30, audioCtx.currentTime);
+                
+                heartGain.gain.setValueAtTime(0, audioCtx.currentTime);
+                heartGain.gain.linearRampToValueAtTime(0.15, audioCtx.currentTime + 0.05);
+                heartGain.gain.linearRampToValueAtTime(0, audioCtx.currentTime + 0.25);
+                
+                heartOsc.connect(heartGain);
+                heartGain.connect(bgMusicGain);
+                
+                heartOsc.start();
+                heartOsc.stop(audioCtx.currentTime + 0.3);
+                
+                // Следующий удар через 1-2 секунды (не регулярно = тревожно)
+                setTimeout(heartbeat, 1000 + Math.random() * 1000);
+            }
+            heartbeat();
+            
+            // Случайные "скрипы" и "шёпоты"
+            function randomAmbience() {
+                if(!isMusicPlaying || isMuted) {
+                    setTimeout(randomAmbience, 5000);
+                    return;
+                }
+                
+                const type = Math.random();
+                
+                if(type < 0.4) {
+                    // Скрип
+                    const squeak = audioCtx.createOscillator();
+                    const squeakGain = audioCtx.createGain();
+                    squeak.type = 'sawtooth';
+                    squeak.frequency.setValueAtTime(800 + Math.random() * 400, audioCtx.currentTime);
+                    squeak.frequency.exponentialRampToValueAtTime(200, audioCtx.currentTime + 0.15);
+                    squeakGain.gain.setValueAtTime(0, audioCtx.currentTime);
+                    squeakGain.gain.linearRampToValueAtTime(0.04, audioCtx.currentTime + 0.02);
+                    squeakGain.gain.linearRampToValueAtTime(0, audioCtx.currentTime + 0.15);
+                    squeak.connect(squeakGain);
+                    squeakGain.connect(bgMusicGain);
+                    squeak.start();
+                    squeak.stop(audioCtx.currentTime + 0.2);
+                } else if(type < 0.7) {
+                    // Низкий гул
+                    const rumble = audioCtx.createOscillator();
+                    const rumbleGain = audioCtx.createGain();
+                    rumble.type = 'square';
+                    rumble.frequency.setValueAtTime(60 + Math.random() * 20, audioCtx.currentTime);
+                    rumbleGain.gain.setValueAtTime(0.02, audioCtx.currentTime);
+                    rumbleGain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.8);
+                    rumble.connect(rumbleGain);
+                    rumbleGain.connect(bgMusicGain);
+                    rumble.start();
+                    rumble.stop(audioCtx.currentTime + 0.8);
+                }
+                
+                setTimeout(randomAmbience, 3000 + Math.random() * 4000);
+            }
+            randomAmbience();
+            
+            isMusicPlaying = true;
+        }
+        
+        function toggleMute() {
+            isMuted = !isMuted;
+            soundToggle.classList.toggle('muted', isMuted);
+            
+            if(bgMusicGain) {
+                bgMusicGain.gain.setValueAtTime(isMuted ? 0 : 0.08, audioCtx.currentTime);
+            }
+        }
+        
+        // === СКРИМЕР ЗВУК ===
+        function playScreamerSound() {
+            if(!audioCtx || isMuted) return;
+            
+            // Резкий визг
+            const screech = audioCtx.createOscillator();
+            const screechGain = audioCtx.createGain();
+            screech.type = 'square';
+            screech.frequency.setValueAtTime(1200, audioCtx.currentTime);
+            screech.frequency.exponentialRampToValueAtTime(300, audioCtx.currentTime + 0.4);
+            screechGain.gain.setValueAtTime(0, audioCtx.currentTime);
+            screechGain.gain.linearRampToValueAtTime(0.4, audioCtx.currentTime + 0.03);
+            screechGain.gain.linearRampToValueAtTime(0, audioCtx.currentTime + 0.4);
+            screech.connect(screechGain);
+            screechGain.connect(audioCtx.destination);
+            screech.start();
+            screech.stop(audioCtx.currentTime + 0.45);
+            
+            // Низкий удар
+            const impact = audioCtx.createOscillator();
+            const impactGain = audioCtx.createGain();
+            impact.type = 'sine';
+            impact.frequency.setValueAtTime(40, audioCtx.currentTime);
+            impactGain.gain.setValueAtTime(0.3, audioCtx.currentTime);
+            impactGain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.5);
+            impact.connect(impactGain);
+            impactGain.connect(audioCtx.destination);
+            impact.start();
+            impact.stop(audioCtx.currentTime + 0.5);
+            
+            // Шёпот/хрип
+            const whisper = audioCtx.createOscillator();
+            const whisperGain = audioCtx.createGain();
+            whisper.type = 'sawtooth';
+            whisper.frequency.setValueAtTime(150, audioCtx.currentTime);
+            whisper.frequency.linearRampToValueAtTime(100, audioCtx.currentTime + 0.3);
+            whisperGain.gain.setValueAtTime(0, audioCtx.currentTime);
+            whisperGain.gain.linearRampToValueAtTime(0.08, audioCtx.currentTime + 0.05);
+            whisperGain.gain.linearRampToValueAtTime(0, audioCtx.currentTime + 0.3);
+            whisper.connect(whisperGain);
+            whisperGain.connect(audioCtx.destination);
+            whisper.start();
+            whisper.stop(audioCtx.currentTime + 0.35);
+        }
+        
+        // === СКРИМЕР ВИЗУАЛ ===
+        function triggerScreamer(winAmount) {
+            initAudio();
+            if(audioCtx && audioCtx.state === 'suspended') audioCtx.resume();
+            
+            screamer.classList.add('active');
+            setTimeout(() => playScreamerSound(), 100);
+            
+            // Автоскрытие
+            setTimeout(() => {
+                screamer.classList.remove('active');
+            }, 3000);
+        }
+        
+        screamerClose.addEventListener('click', () => screamer.classList.remove('active'));
+        screamerClose.addEventListener('touchend', (e) => { e.preventDefault(); screamer.classList.remove('active'); });
+        soundToggle.addEventListener('click', () => { initAudio(); toggleMute(); });
+        soundToggle.addEventListener('touchend', (e) => { e.preventDefault(); initAudio(); toggleMute(); });
+        
+        // Отрисовка символа
+        function drawSymbol(ctx, symbol, width, height) {
+            ctx.clearRect(0, 0, width, height);
+            
+            const grad = ctx.createLinearGradient(0, 0, width, height);
+            grad.addColorStop(0, '#fff0e6');
+            grad.addColorStop(0.5, '#ffe0c8');
+            grad.addColorStop(1, '#ffd0b0');
+            ctx.fillStyle = grad;
+            ctx.fillRect(0, 0, width, height);
+            
+            ctx.strokeStyle = '#8b0000';
+            ctx.lineWidth = 3;
+            ctx.strokeRect(4, 4, width-8, height-8);
+            
+            ctx.strokeStyle = 'rgba(139, 0, 0, 0.4)';
+            ctx.lineWidth = 1;
+            ctx.strokeRect(8, 8, width-16, height-16);
+            
+            ctx.font = `bold ${Math.floor(height * 0.52)}px "Segoe UI Emoji", "Apple Color Emoji", sans-serif`;
+            ctx.textAlign = "center";
+            ctx.textBaseline = "middle";
+            ctx.shadowBlur = 10;
+            ctx.shadowColor = "rgba(139, 27, 27, 0.6)";
+            ctx.fillStyle = "#2a0508";
+            ctx.fillText(symbol, width/2, height/2);
+            
+            ctx.shadowBlur = 0;
+            ctx.fillStyle = "rgba(204, 0, 0, 0.5)";
+            ctx.font = `${Math.floor(height * 0.18)}px sans-serif`;
+            ctx.fillText("🩸", width-18, 18);
+            
+            ctx.fillStyle = "rgba(107, 27, 107, 0.25)";
+            ctx.font = `bold ${Math.floor(height * 0.15)}px 'Creepster', cursive`;
+            ctx.fillText("7K", 15, height-12);
+        }
+        
+        function updateAllReelsDisplay() {
+            drawSymbol(ctx0, currentSymbols[0], 120, 120);
+            drawSymbol(ctx1, currentSymbols[1], 120, 120);
+            drawSymbol(ctx2, currentSymbols[2], 120, 120);
+        }
+        
+        function showNotification(message, isJackpot = false) {
+            notification.textContent = message;
+            notification.className = 'notification' + (isJackpot ? ' jackpot' : '');
+            notification.classList.add('show');
+            setTimeout(() => notification.classList.remove('show'), 3000);
+        }
+        
+        function updateUI() {
+            balanceSpan.innerText = Math.floor(balance);
+            betSpan.innerText = currentBet;
+            winSpan.innerText = lastWin;
+            jackpotIndicator.innerHTML = `🔥 ДЖЕКПОТ: ${JACKPOT_AMOUNT} 🔥`;
+            
+            if(lastWin > 0) {
+                winSpan.style.color = "#ff6b6b";
+                document.querySelector('.display-area').classList.add('win-animation');
+                setTimeout(() => {
+                    document.querySelector('.display-area').classList.remove('win-animation');
+                    if(lastWin === parseInt(winSpan.innerText)) winSpan.style.color = "#fff";
+                }, 600);
+            } else {
+                winSpan.style.color = "#fff";
+            }
+            
+            spinBtn.disabled = (balance < currentBet || isSpinning);
+            if(balance <= 0) {
+                spinBtn.disabled = true;
+                spinBtn.style.opacity = "0.5";
+            } else {
+                spinBtn.style.opacity = "1";
+            }
+        }
+        
+        // === ЛОГИКА ВЫИГРЫША ===
+        function calculateWin(symbolsArray, bet) {
+            const [s1, s2, s3] = symbolsArray;
+            
+            if(s1 === "7️⃣" && s2 === "7️⃣" && s3 === "7️⃣") {
+                return applyHouseEdge(JACKPOT_AMOUNT, bet);
+            }
+            
+            if(s1 === s2 && s2 === s3) {
+                let multiplier = 3;
+                if(s1 === "🍒") multiplier = 7;
+                const baseWin = bet * multiplier;
+                return applyHouseEdge(baseWin, bet);
+            }
+            
+            if(s1 === s2 || s2 === s3 || s1 === s3) {
+                if(s1 === "🍒" || s2 === "🍒" || s3 === "🍒" || s1 === "7️⃣" || s2 === "7️⃣" || s3 === "7️⃣") {
+                    const baseWin = bet * 2;
+                    return applyHouseEdge(baseWin, bet);
+                }
+                return 0;
+            }
+            
+            if(s1 === "7️⃣" || s2 === "7️⃣" || s3 === "7️⃣") {
+                return Math.floor(bet * 0.1);
+            }
+            
+            return 0;
+        }
+        
+        // === АНИМАЦИЯ ===
+        async function spinSlots() {
+            if(isSpinning) return;
+            if(balance < currentBet) {
+                showNotification("⚠️ Недостаточно крови... э-э, средств!");
+                return;
+            }
+            
+            isSpinning = true;
+            updateUI();
+            balance -= currentBet;
+            lastWin = 0;
+            updateUI();
+            
+            // Предопределение результата (88% проигрыш)
+            const forceLoss = Math.random() < 0.92;
+            let predeterminedSymbols;
+            
+            if(forceLoss) {
+                const losingSymbols = ["🍋", "🍊", "🍇", "🔔", "⭐"];
+                predeterminedSymbols = [
+                    losingSymbols[Math.floor(Math.random() * losingSymbols.length)],
+                    losingSymbols[Math.floor(Math.random() * losingSymbols.length)],
+                    losingSymbols[Math.floor(Math.random() * losingSymbols.length)]
+                ];
+                if(Math.random() < 0.5) {
+                    const same = losingSymbols[Math.floor(Math.random() * 3)];
+                    predeterminedSymbols[0] = same;
+                    predeterminedSymbols[1] = same;
+                }
+            } else {
+                predeterminedSymbols = null;
+            }
+            
+            let finalSymbols = ["", "", ""];
+            const spinDuration = [380, 500, 620];
+            const spinSteps = 13;
+            
+            function animateReel(index, durationMs, callbackFinal) {
+                const canvasCtx = [ctx0, ctx1, ctx2][index];
+                const steps = spinSteps;
+                let step = 0;
+                const intervalTime = durationMs / steps;
+                
+                let rollingInterval = setInterval(() => {
+                    let randomSym = getRandomSymbol();
+                    drawSymbol(canvasCtx, randomSym, 120, 120);
+                    step++;
+                    if(step >= steps) {
+                        clearInterval(rollingInterval);
+                        const finalSym = predeterminedSymbols ? predeterminedSymbols[index] : getRandomSymbol();
+                        finalSymbols[index] = finalSym;
+                        drawSymbol(canvasCtx, finalSym, 120, 120);
+                        if(callbackFinal) callbackFinal();
+                    }
+                }, intervalTime);
+            }
+            
+            let completed = 0;
+            function onReelDone() {
+                completed++;
+                if(completed === 3) {
+                    currentSymbols = [...finalSymbols];
+                    const winAmount = calculateWin(currentSymbols, currentBet);
+                    lastWin = winAmount;
+                    
+                    if(winAmount > 0) {
+                        balance += winAmount;
+                        winSpan.innerText = winAmount;
+                        
+                        // === СКРИМЕР НА ЛЮБОЙ ВЫИГРЫШ ===
+                        triggerScreamer(winAmount);
+                        
+                        if(winAmount === JACKPOT_AMOUNT) {
+                            showNotification("🩸🩸 НЕВОЗМОЖНО! ДЖЕКПОТ! ТЫ ПРОКЛЯТ... ИЛИ БЛАГОСЛОВЛЁН? 🩸🩸", true);
+                            [ctx0, ctx1, ctx2].forEach(ctx => {
+                                ctx.fillStyle = "rgba(204, 0, 0, 0.6)";
+                                ctx.globalAlpha = 0.5;
+                                ctx.fillRect(0,0,120,120);
+                                ctx.globalAlpha = 1;
+                            });
+                            setTimeout(() => updateAllReelsDisplay(), 200);
+                        } else if(winAmount >= currentBet*5) {
+                            showNotification(`🔥 КРОВЬ ПРОЛИТА! Выигрыш: ${winAmount}!`);
+                        } else {
+                            showNotification(`🩸 Капля удачи: ${winAmount}`);
+                        }
+                    } else {
+                        winSpan.innerText = "0";
+                        if(currentSymbols[0] === currentSymbols[1] || currentSymbols[1] === currentSymbols[2]) {
+                            showNotification("👁️ Почти... но судьба жестока.");
+                        }
+                    }
+                    
+                    updateUI();
+                    isSpinning = false;
+                    updateAllReelsDisplay();
+                    
+                    if(balance <= 0) {
+                        showNotification("💀 Баланс исчерпан. Душа принята. Приходи... если осмелишься. 🩸");
+                        spinBtn.disabled = true;
+                    }
+                }
+            }
+            
+            animateReel(0, spinDuration[0], onReelDone);
+            animateReel(1, spinDuration[1], onReelDone);
+            animateReel(2, spinDuration[2], onReelDone);
+        }
+        
+        function changeBet(delta) {
+            if(isSpinning) return;
+            let newBet = currentBet + delta;
+            const minBet = 10;
+            const maxBet = Math.min(500, balance > 0 ? balance : 500);
+            
+            if(newBet >= minBet && newBet <= maxBet) currentBet = newBet;
+            else if(newBet < minBet) currentBet = minBet;
+            else if(newBet > maxBet) currentBet = maxBet;
+            
+            if(currentBet > balance && balance > 0) currentBet = balance;
+            if(currentBet < 10) currentBet = 10;
+            updateUI();
+        }
+        
+        function resetGame() {
+            if(isSpinning) return;
+            balance = 1000;
+            currentBet = 50;
+            lastWin = 0;
+            currentSymbols = ["🍋", "🍋", "🍋"];
+            updateAllReelsDisplay();
+            updateUI();
+            isSpinning = false;
+            if(spinInterval) clearInterval(spinInterval);
+            spinBtn.disabled = false;
+            showNotification("🔄 Игра сброшена | Тени ждут... 🩸");
+        }
+        
+        function initDisplay() {
+            updateAllReelsDisplay();
+            updateUI();
+        }
+        
+        // === ОБРАБОТЧИКИ ===
+        function bindTap(element, handler) {
+            let lastTouchEnd = 0;
+            element.addEventListener('touchend', function(e) {
+                e.preventDefault();
+                e.stopPropagation();
+                const now = Date.now();
+                if(now - lastTouchEnd <= 300) return;
+                lastTouchEnd = now;
+                handler(e);
+            }, {passive: false});
+            element.addEventListener('click', function(e) {
+                const now = Date.now();
+                if(now - lastTouchEnd <= 350) return;
+                handler(e);
+            });
+        }
+        
+        bindTap(spinBtn, () => {
+            if(!isSpinning && balance >= currentBet) {
+                initAudio();
+                if(audioCtx && audioCtx.state === 'suspended') audioCtx.resume();
+                spinSlots().catch(e=>console.warn(e));
+            } else if(balance < currentBet) {
+                showNotification("⚠️ Увеличьте баланс или уменьшите ставку");
+            }
+        });
+        
+        bindTap(decreaseBetBtn, () => changeBet(-10));
+        bindTap(increaseBetBtn, () => changeBet(10));
+        bindTap(resetBtn, () => resetGame());
+        
+        spinBtn.addEventListener('click', (e) => {
+            if(e.pointerType !== 'touch' && !isSpinning && balance >= currentBet) {
+                initAudio();
+                if(audioCtx && audioCtx.state === 'suspended') audioCtx.resume();
+                spinSlots().catch(e=>console.warn(e));
+            }
+        });
+        
+        window.addEventListener('keydown', (e) => {
+            if(e.code === 'Space' && !isSpinning && balance >= currentBet) {
+                e.preventDefault();
+                initAudio();
+                spinSlots();
+            }
+            if(e.code === 'ArrowUp') { e.preventDefault(); changeBet(10); }
+            if(e.code === 'ArrowDown') { e.preventDefault(); changeBet(-10); }
+            if(e.code === 'KeyR') { e.preventDefault(); resetGame(); }
+            if(e.code === 'KeyM') { e.preventDefault(); initAudio(); toggleMute(); }
+        });
+        
+        setInterval(() => {
+            if(lastWin > 0 && !isSpinning) {
+                const winElement = document.getElementById('winAmount');
+                if(winElement && parseInt(winElement.innerText) > 0) {
+                    winElement.style.textShadow = "0 0 10px #ff6b6b, 0 0 20px rgba(204,0,0,0.8)";
+                    setTimeout(() => winElement.style.textShadow = "0 2px 0 rgba(0,0,0,0.6)", 400);
+                }
+            }
+        }, 700);
+        
+        console.log("🩸 7K Casino HORROR EDITION Loaded | House Edge: 92% | The darkness hungers... 👁️");
+        initDisplay();
+        
+        document.addEventListener('click', () => initAudio(), {once: true});
+        document.addEventListener('touchstart', () => initAudio(), {once: true});
+    })();
 </script>
 </body>
 </html>
