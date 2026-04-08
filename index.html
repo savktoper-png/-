@@ -2,13 +2,14 @@
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, maximum-scale=1">
     <title>7K Casino | Слот-симулятор</title>
     <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Rajdhani:wght@400;600;700&display=swap" rel="stylesheet">
     <style>
         * {
             user-select: none;
             -webkit-tap-highlight-color: transparent;
+            -webkit-touch-callout: none;
             box-sizing: border-box;
         }
 
@@ -20,6 +21,7 @@
             --7k-black: #0a0a0f;
             --7k-dark: #12121a;
             --7k-glow: 0 0 20px rgba(255, 215, 0, 0.6), 0 0 40px rgba(107, 27, 107, 0.4);
+            --7k-red: #ff1744;
         }
 
         body {
@@ -36,9 +38,9 @@
             padding: 15px;
             overflow-x: hidden;
             position: relative;
+            touch-action: manipulation;
         }
 
-        /* Анимированный фон с частицами */
         body::before {
             content: '';
             position: fixed;
@@ -59,7 +61,6 @@
             100% { background-position: 200px 200px, 150px 100px, 100px 150px; }
         }
 
-        /* Логотип 7K */
         .casino-logo {
             position: absolute;
             top: 20px;
@@ -69,13 +70,11 @@
             font-size: 2.5rem;
             font-weight: 900;
             color: var(--7k-gold);
-            text-shadow: 
-                0 0 10px var(--7k-gold),
-                0 0 20px var(--7k-purple),
-                0 0 40px rgba(255, 215, 0, 0.8);
+            text-shadow: 0 0 10px var(--7k-gold), 0 0 20px var(--7k-purple), 0 0 40px rgba(255, 215, 0, 0.8);
             letter-spacing: 4px;
             z-index: 10;
             animation: pulse 2s ease-in-out infinite;
+            pointer-events: none;
         }
 
         @keyframes pulse {
@@ -88,17 +87,11 @@
             text-shadow: 0 0 15px var(--7k-gold);
         }
 
-        /* Основной контейнер */
         .slot-machine {
-            background: 
-                linear-gradient(145deg, rgba(30,15,45,0.95), rgba(18,12,30,0.98)),
-                url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" width="100" height="100"><rect width="100" height="100" fill="%231a0a2e"/><path d="M0,0 L100,100 M100,0 L0,100" stroke="%236b1b6b22" stroke-width="1"/></svg>');
+            background: linear-gradient(145deg, rgba(30,15,45,0.95), rgba(18,12,30,0.98));
             border-radius: 60px 60px 40px 40px;
             padding: 35px 30px 40px 30px;
-            box-shadow: 
-                var(--7k-glow),
-                0 25px 50px rgba(0,0,0,0.8),
-                inset 0 1px 0 rgba(255,255,255,0.1);
+            box-shadow: var(--7k-glow), 0 25px 50px rgba(0,0,0,0.8), inset 0 1px 0 rgba(255,255,255,0.1);
             border: 3px solid transparent;
             border-image: linear-gradient(45deg, var(--7k-gold), var(--7k-purple), var(--7k-gold)) 1;
             position: relative;
@@ -124,20 +117,17 @@
             border-radius: 30px;
             border: 2px solid var(--7k-gold);
             box-shadow: 0 4px 15px rgba(255, 215, 0, 0.4);
+            pointer-events: none;
         }
 
         .display-area {
             background: linear-gradient(180deg, #0d0d15 0%, #151025 100%);
             border-radius: 45px;
             padding: 25px 20px;
-            box-shadow: 
-                inset 0 2px 10px rgba(0,0,0,0.6),
-                inset 0 -2px 10px rgba(107, 27, 107, 0.3),
-                0 8px 25px rgba(0,0,0,0.5);
+            box-shadow: inset 0 2px 10px rgba(0,0,0,0.6), inset 0 -2px 10px rgba(107, 27, 107, 0.3), 0 8px 25px rgba(0,0,0,0.5);
             border: 2px solid rgba(255, 215, 0, 0.2);
         }
 
-        /* Барабаны */
         .reels-container {
             display: flex;
             justify-content: center;
@@ -158,6 +148,7 @@
             text-shadow: 0 0 10px var(--7k-gold);
             opacity: 0.7;
             z-index: 1;
+            pointer-events: none;
         }
         .reels-container::before { left: -25px; }
         .reels-container::after { right: -25px; }
@@ -166,10 +157,7 @@
             background: linear-gradient(145deg, #1a1525, #0f0d1a);
             border-radius: 25px;
             padding: 10px 6px;
-            box-shadow: 
-                inset 0 0 0 2px var(--7k-gold-dark),
-                inset 0 0 20px rgba(107, 27, 107, 0.4),
-                0 8px 25px rgba(0,0,0,0.6);
+            box-shadow: inset 0 0 0 2px var(--7k-gold-dark), inset 0 0 20px rgba(107, 27, 107, 0.4), 0 8px 25px rgba(0,0,0,0.6);
             transition: all 0.15s ease;
             position: relative;
             overflow: hidden;
@@ -181,6 +169,7 @@
             top: 0; left: 0; right: 0; height: 3px;
             background: linear-gradient(90deg, transparent, var(--7k-gold), transparent);
             animation: scanline 3s linear infinite;
+            pointer-events: none;
         }
 
         @keyframes scanline {
@@ -193,13 +182,11 @@
             margin: 0 auto;
             background: linear-gradient(145deg, #fff9e6, #ffecb3);
             border-radius: 22px;
-            box-shadow: 
-                inset 0 0 0 3px #d4af37,
-                inset 0 0 15px rgba(0,0,0,0.2),
-                0 5px 15px rgba(0,0,0,0.4);
+            box-shadow: inset 0 0 0 3px #d4af37, inset 0 0 15px rgba(0,0,0,0.2), 0 5px 15px rgba(0,0,0,0.4);
             width: 115px;
             height: 115px;
             position: relative;
+            touch-action: none;
         }
 
         canvas::after {
@@ -211,7 +198,6 @@
             pointer-events: none;
         }
 
-        /* Панель информации */
         .info-panel {
             background: linear-gradient(135deg, rgba(30,20,50,0.9), rgba(20,15,35,0.95));
             backdrop-filter: blur(12px);
@@ -241,12 +227,11 @@
             min-width: 140px;
             text-align: center;
             transition: all 0.2s ease;
+            cursor: pointer;
         }
 
-        .balance-box:hover, .bet-box:hover, .win-box:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 5px 20px rgba(255, 215, 0, 0.3);
-            border-color: var(--7k-gold);
+        .balance-box:active, .bet-box:active, .win-box:active {
+            transform: scale(0.98);
         }
 
         .balance-box span, .bet-box span, .win-box span {
@@ -272,6 +257,7 @@
             box-shadow: 0 4px 15px rgba(255, 107, 107, 0.4);
             min-width: 180px;
             border: 2px solid #fff;
+            cursor: pointer;
         }
 
         @keyframes gradient-shift {
@@ -279,7 +265,6 @@
             50% { background-position: 100% 50%; }
         }
 
-        /* Кнопки управления */
         .controls {
             display: flex;
             gap: 14px;
@@ -297,15 +282,16 @@
             border-radius: 50px;
             color: #1a0a00;
             cursor: pointer;
-            transition: all 0.12s ease;
-            box-shadow: 
-                0 6px 0 #7a5400,
-                0 8px 20px rgba(0,0,0,0.4);
+            transition: all 0.1s ease;
+            box-shadow: 0 6px 0 #7a5400, 0 8px 20px rgba(0,0,0,0.4);
             font-family: 'Rajdhani', sans-serif;
             letter-spacing: 1px;
             text-transform: uppercase;
             position: relative;
             overflow: hidden;
+            touch-action: manipulation;
+            -webkit-appearance: none;
+            appearance: none;
         }
 
         button::before {
@@ -315,15 +301,17 @@
             width: 100%; height: 100%;
             background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent);
             transition: left 0.4s ease;
+            pointer-events: none;
         }
 
-        button:hover::before {
+        button:hover::before,
+        button:active::before {
             left: 100%;
         }
 
         button:active {
-            transform: translateY(4px);
-            box-shadow: 0 2px 0 #7a5400, 0 4px 10px rgba(0,0,0,0.4);
+            transform: translateY(4px) !important;
+            box-shadow: 0 2px 0 #7a5400, 0 4px 10px rgba(0,0,0,0.4) !important;
         }
 
         button:hover {
@@ -335,10 +323,7 @@
             background: linear-gradient(to bottom, #ffd700, #e6b400, #cc9900);
             font-size: 1.5rem;
             padding: 12px 45px;
-            box-shadow: 
-                0 7px 0 #996600,
-                0 0 25px rgba(255, 215, 0, 0.6),
-                0 10px 30px rgba(0,0,0,0.5);
+            box-shadow: 0 7px 0 #996600, 0 0 25px rgba(255, 215, 0, 0.6), 0 10px 30px rgba(0,0,0,0.5);
             font-family: 'Orbitron', monospace;
             letter-spacing: 2px;
             animation: glow-pulse 2s ease-in-out infinite;
@@ -372,17 +357,16 @@
             box-shadow: 0 4px 0 #555 !important;
         }
 
-        /* Подвал с правилами */
         .rules-footer {
             text-align: center;
             margin-top: 18px;
-            font-size: 0.75rem;
-            color: #c9a961;
+            font-size: 0.7rem;
+            color: #8b7355;
             background: rgba(30, 20, 50, 0.6);
-            padding: 10px 15px;
+            padding: 8px 12px;
             border-radius: 25px;
-            border: 1px solid rgba(255, 215, 0, 0.2);
-            line-height: 1.4;
+            border: 1px solid rgba(255, 215, 0, 0.15);
+            line-height: 1.3;
         }
 
         .rules-footer strong {
@@ -390,9 +374,8 @@
             font-family: 'Orbitron', monospace;
         }
 
-        /* Эффект победы */
         .win-animation {
-            animation: win-flash 0.3s ease 3;
+            animation: win-flash 0.25s ease 4;
         }
 
         @keyframes win-flash {
@@ -400,32 +383,83 @@
             50% { box-shadow: inset 0 0 20px var(--7k-gold), 0 0 30px rgba(255, 215, 0, 0.8); }
         }
 
-        /* Адаптивность */
-        @media (max-width: 600px) {
-            .casino-logo { font-size: 2rem; top: 12px; }
-            .slot-machine { padding: 25px 20px 30px; border-radius: 50px 50px 35px 35px; }
-            .reels-container { gap: 10px; }
-            .reels-container::before, .reels-container::after { display: none; }
-            canvas { width: 95px; height: 95px; }
-            .balance-box, .bet-box, .win-box { 
-                font-size: 1.1rem; 
-                padding: 8px 16px; 
-                min-width: 120px;
-            }
-            button { font-size: 0.95rem; padding: 10px 18px; }
-            .spin-btn { font-size: 1.25rem; padding: 10px 35px; }
-            .jackpot-light { font-size: 0.95rem; padding: 6px 15px; min-width: 160px; }
-            .rules-footer { font-size: 0.7rem; padding: 8px 12px; }
+        /* === СКРИМЕР === */
+        .screamer-overlay {
+            position: fixed;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: #000;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            z-index: 9999;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.05s;
         }
 
-        @media (max-width: 400px) {
-            .info-panel { flex-direction: column; align-items: center; }
-            .balance-box, .bet-box, .win-box, .jackpot-light { width: 100%; max-width: 280px; }
-            .controls { flex-direction: column; align-items: center; }
-            button, .spin-btn { width: 100%; max-width: 280px; }
+        .screamer-overlay.active {
+            opacity: 1;
+            pointer-events: all;
+            animation: screamer-flash 0.1s steps(1) infinite;
         }
 
-        /* Уведомления */
+        @keyframes screamer-flash {
+            0%, 100% { background: #000; }
+            50% { background: #ff0000; }
+        }
+
+        .screamer-face {
+            font-size: clamp(80px, 25vw, 180px);
+            animation: screamer-shake 0.05s ease-in-out infinite;
+            text-shadow: 0 0 30px #ff0000, 0 0 60px #ff0000;
+            filter: drop-shadow(0 0 20px #ff0000);
+        }
+
+        @keyframes screamer-shake {
+            0%, 100% { transform: translate(0, 0) rotate(0deg) scale(1); }
+            25% { transform: translate(-5px, 3px) rotate(-2deg) scale(1.02); }
+            50% { transform: translate(3px, -4px) rotate(2deg) scale(0.98); }
+            75% { transform: translate(-2px, 2px) rotate(-1deg) scale(1.01); }
+        }
+
+        .screamer-text {
+            color: #fff;
+            font-family: 'Orbitron', monospace;
+            font-size: clamp(20px, 5vw, 40px);
+            font-weight: 900;
+            text-align: center;
+            margin-top: 20px;
+            text-shadow: 0 0 10px #ff0000;
+            animation: text-flicker 0.1s infinite;
+        }
+
+        @keyframes text-flicker {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.7; }
+        }
+
+        .screamer-close {
+            margin-top: 30px;
+            padding: 15px 40px;
+            background: var(--7k-red);
+            color: #fff;
+            border: 3px solid #fff;
+            border-radius: 50px;
+            font-family: 'Orbitron', monospace;
+            font-size: 1.2rem;
+            font-weight: 700;
+            cursor: pointer;
+            animation: pulse-red 0.3s ease-in-out infinite;
+            touch-action: manipulation;
+        }
+
+        @keyframes pulse-red {
+            0%, 100% { box-shadow: 0 0 20px var(--7k-red); }
+            50% { box-shadow: 0 0 40px #ff0000, 0 0 60px #ff0000; }
+        }
+
+        /* === Уведомления === */
         .notification {
             position: fixed;
             top: 80px;
@@ -444,6 +478,7 @@
             transition: transform 0.4s ease;
             text-align: center;
             max-width: 90vw;
+            pointer-events: none;
         }
 
         .notification.show {
@@ -465,7 +500,6 @@
             75% { transform: translateX(-50%) translateY(-5px) scale(1.02); }
         }
 
-        /* Декоративные элементы */
         .decoration {
             position: absolute;
             font-size: 1.5rem;
@@ -482,6 +516,27 @@
             0%, 100% { transform: translateY(0) rotate(0deg); }
             50% { transform: translateY(-15px) rotate(5deg); }
         }
+
+        /* Адаптивность */
+        @media (max-width: 600px) {
+            .casino-logo { font-size: 2rem; top: 12px; }
+            .slot-machine { padding: 25px 20px 30px; border-radius: 50px 50px 35px 35px; }
+            .reels-container { gap: 10px; }
+            .reels-container::before, .reels-container::after { display: none; }
+            canvas { width: 95px; height: 95px; }
+            .balance-box, .bet-box, .win-box { font-size: 1.1rem; padding: 8px 16px; min-width: 120px; }
+            button { font-size: 0.95rem; padding: 10px 18px; }
+            .spin-btn { font-size: 1.25rem; padding: 10px 35px; }
+            .jackpot-light { font-size: 0.95rem; padding: 6px 15px; min-width: 160px; }
+            .rules-footer { font-size: 0.65rem; padding: 6px 10px; }
+        }
+
+        @media (max-width: 400px) {
+            .info-panel { flex-direction: column; align-items: center; }
+            .balance-box, .bet-box, .win-box, .jackpot-light { width: 100%; max-width: 280px; }
+            .controls { flex-direction: column; align-items: center; }
+            button, .spin-btn { width: 100%; max-width: 280px; }
+        }
     </style>
 </head>
 <body>
@@ -496,6 +551,13 @@
 
     <!-- Уведомления -->
     <div class="notification" id="notification"></div>
+
+    <!-- СКРИМЕР -->
+    <div class="screamer-overlay" id="screamer">
+        <div class="screamer-face">😱👹💀</div>
+        <div class="screamer-text">ТЫ ВЫИГРАЛ!<br>НО ЦЕНА БЫЛА ВЫСОКА... 🔥</div>
+        <button class="screamer-close" id="screamerClose">ЗАБРАТЬ И УЙТИ</button>
+    </div>
 
     <!-- Основной контейнер -->
     <div class="slot-machine">
@@ -521,16 +583,18 @@
             </div>
             
             <div class="rules-footer">
-                <strong>ПРАВИЛА 7K:</strong> 3×✡︎/☯︎/👯‍♂️/☢️ = ×5 | 3×☪︎/🍒 = ×7 | 3×7️⃣ = <strong>ДЖЕКПОТ 5000</strong> | 2×совпадения = ×2
+                <strong>ПРАВИЛА 7K:</strong> Шанс победы ~12% | 3×7️⃣ = ДЖЕКПОТ 5000 | 3×🍒/☪️ = ×7 | 2×совпадения = ×2 | <em>Казино всегда в плюсе 😉</em>
             </div>
         </div>
     </div>
 
 <script>
     (function(){
-        // ---------- НАСТРОЙКИ СЛОТОВ 7K CASINO ----------
-        const SYMBOLS = ["🍒", "☯︎", "👯‍♂️", "☪︎", "☢️", "✡︎", "7️⃣"];
-        const SYMBOL_WEIGHTS = [9, 15, 35, 10, 15, 15, 1];
+        // ========== НАСТРОЙКИ "ЧЕСТНОЙ" МАТЕМАТИКИ 😈 ==========
+        // Веса символов: БОЛЬШИЕ числа = БОЛЕЕ частые (проигрышные) символы
+        const SYMBOLS = ["🍋", "🍊", "🍇", "🔔", "⭐", "🍒", "7️⃣"];
+        // 7️⃣ теперь ультра-редкий (1 из ~500), 🍒 редкий, остальные — частые "пустышки"
+        const SYMBOL_WEIGHTS = [35, 30, 25, 20, 15, 4, 1]; // Общий вес = 130
         
         let weightedPool = [];
         for(let i=0; i<SYMBOLS.length; i++) {
@@ -543,13 +607,29 @@
             return weightedPool[Math.floor(Math.random() * weightedPool.length)];
         }
         
+        // === ДОПОЛНИТЕЛЬНЫЙ "HOUSE EDGE" ===
+        // Шанс принудительного проигрыша даже при "выигрышной" комбинации
+        const HOUSE_EDGE_CHANCE = 0.15; // 15% шанс "подкрутить" результат
+        
+        function applyHouseEdge(baseWin, bet) {
+            // Даже если выпал выигрыш — с шансом 15% превращаем в 0
+            if(baseWin > 0 && Math.random() < HOUSE_EDGE_CHANCE) {
+                return 0;
+            }
+            // Для джекпота — шанс 3% "потерять" его (но показываем красивую анимацию)
+            if(baseWin === JACKPOT_AMOUNT && Math.random() < 0.03) {
+                return Math.floor(bet * 0.5); // "утешительный" пол-ставочного возврата
+            }
+            return baseWin;
+        }
+        
         // Игровые переменные
         let balance = 1000;
         let currentBet = 50;
         let lastWin = 0;
         let isSpinning = false;
         let spinInterval = null;
-        let currentSymbols = ["🍒", "🍒", "🍒"];
+        let currentSymbols = ["🍋", "🍋", "🍋"]; // Начинаем с "пустышек"
         const JACKPOT_AMOUNT = 5000;
         
         // DOM элементы
@@ -562,6 +642,8 @@
         const resetBtn = document.getElementById('resetGame');
         const jackpotIndicator = document.getElementById('jackpotIndicator');
         const notification = document.getElementById('notification');
+        const screamer = document.getElementById('screamer');
+        const screamerClose = document.getElementById('screamerClose');
         
         // Canvas
         const canvas0 = document.getElementById('reel0');
@@ -571,11 +653,78 @@
         const ctx1 = canvas1.getContext('2d');
         const ctx2 = canvas2.getContext('2d');
         
-        // Отрисовка символа в стиле 7K
+        // === АУДИО ДЛЯ СКРИМЕРА (Web Audio API) ===
+        let audioCtx = null;
+        function initAudio() {
+            if(!audioCtx) {
+                audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+            }
+        }
+        
+        function playScreamerSound() {
+            if(!audioCtx) return;
+            
+            // Резкий скример-звук (высокочастотный писк + низкий гул)
+            const oscillator1 = audioCtx.createOscillator();
+            const oscillator2 = audioCtx.createOscillator();
+            const gainNode = audioCtx.createGain();
+            
+            oscillator1.type = 'square';
+            oscillator1.frequency.setValueAtTime(880, audioCtx.currentTime); // A5
+            oscillator1.frequency.exponentialRampToValueAtTime(220, audioCtx.currentTime + 0.3);
+            
+            oscillator2.type = 'sawtooth';
+            oscillator2.frequency.setValueAtTime(55, audioCtx.currentTime); // Низкий гул
+            
+            gainNode.gain.setValueAtTime(0.3, audioCtx.currentTime);
+            gainNode.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.4);
+            
+            oscillator1.connect(gainNode);
+            oscillator2.connect(gainNode);
+            gainNode.connect(audioCtx.destination);
+            
+            oscillator1.start();
+            oscillator2.start();
+            oscillator1.stop(audioCtx.currentTime + 0.4);
+            oscillator2.stop(audioCtx.currentTime + 0.4);
+        }
+        
+        // === СКРИМЕР ===
+        function triggerScreamer(winAmount) {
+            initAudio(); // Инициализируем аудио при первом взаимодействии
+            
+            screamer.classList.add('active');
+            
+            // Воспроизводим звук с небольшой задержкой для эффекта
+            setTimeout(() => {
+                try {
+                    if(audioCtx && audioCtx.state === 'suspended') {
+                        audioCtx.resume();
+                    }
+                    playScreamerSound();
+                } catch(e) {
+                    console.log('Audio blocked by browser');
+                }
+            }, 150);
+            
+            // Автоскрытие через 3.5 секунды
+            setTimeout(() => {
+                screamer.classList.remove('active');
+            }, 3500);
+        }
+        
+        screamerClose.addEventListener('click', () => {
+            screamer.classList.remove('active');
+        });
+        screamerClose.addEventListener('touchend', (e) => {
+            e.preventDefault();
+            screamer.classList.remove('active');
+        });
+        
+        // Отрисовка символа
         function drawSymbol(ctx, symbol, width, height) {
             ctx.clearRect(0, 0, width, height);
             
-            // Фон с градиентом
             const grad = ctx.createLinearGradient(0, 0, width, height);
             grad.addColorStop(0, '#fff9e6');
             grad.addColorStop(0.5, '#ffecb3');
@@ -583,17 +732,14 @@
             ctx.fillStyle = grad;
             ctx.fillRect(0, 0, width, height);
             
-            // Рамка с золотым блеском
             ctx.strokeStyle = '#d4af37';
             ctx.lineWidth = 3;
             ctx.strokeRect(4, 4, width-8, height-8);
             
-            // Внутренняя рамка
             ctx.strokeStyle = 'rgba(212, 175, 55, 0.4)';
             ctx.lineWidth = 1;
             ctx.strokeRect(8, 8, width-16, height-16);
             
-            // Символ
             ctx.font = `bold ${Math.floor(height * 0.52)}px "Segoe UI Emoji", "Apple Color Emoji", sans-serif`;
             ctx.textAlign = "center";
             ctx.textBaseline = "middle";
@@ -602,13 +748,11 @@
             ctx.fillStyle = "#2a1508";
             ctx.fillText(symbol, width/2, height/2);
             
-            // Блеск
             ctx.shadowBlur = 0;
             ctx.fillStyle = "rgba(255, 255, 255, 0.6)";
             ctx.font = `${Math.floor(height * 0.18)}px sans-serif`;
             ctx.fillText("✨", width-18, 18);
             
-            // Логотип 7K в углу
             ctx.fillStyle = "rgba(107, 27, 107, 0.3)";
             ctx.font = `bold ${Math.floor(height * 0.15)}px 'Orbitron', monospace`;
             ctx.fillText("7K", 15, height-12);
@@ -620,15 +764,12 @@
             drawSymbol(ctx2, currentSymbols[2], 120, 120);
         }
         
-        // Показ уведомления
+        // Уведомления
         function showNotification(message, isJackpot = false) {
             notification.textContent = message;
             notification.className = 'notification' + (isJackpot ? ' jackpot' : '');
             notification.classList.add('show');
-            
-            setTimeout(() => {
-                notification.classList.remove('show');
-            }, 3000);
+            setTimeout(() => notification.classList.remove('show'), 3000);
         }
         
         // Обновление UI
@@ -658,30 +799,47 @@
             }
         }
         
-        // Расчет выигрыша
+        // === ИСПРАВЛЕННАЯ ЛОГИКА ВЫИГРЫША (с преимуществом казино) ===
         function calculateWin(symbolsArray, bet) {
             const [s1, s2, s3] = symbolsArray;
             
+            // 🎰 ДЖЕКПОТ: три семёрки (очень редко!)
             if(s1 === "7️⃣" && s2 === "7️⃣" && s3 === "7️⃣") {
-                return JACKPOT_AMOUNT;
+                return applyHouseEdge(JACKPOT_AMOUNT, bet);
             }
+            
+            // 🏆 Три одинаковых
             if(s1 === s2 && s2 === s3) {
-                let multiplier = -5;
-                if(s1 === "☪︎" || s1 === "🍒") multiplier = -1.5;
-                return bet * multiplier;
+                let multiplier = 3; // Базовый множитель снижен
+                
+                // 🍒 — редкий премиум (но всё равно с шансом "обнуления")
+                if(s1 === "🍒") multiplier = 7;
+                
+                const baseWin = bet * multiplier;
+                return applyHouseEdge(baseWin, bet);
             }
-            if(s1 === s2 || s2 === s3) {
-                return bet * -2;
+            
+            // ✨ Два совпадения — только если это "дорогие" символы
+            if(s1 === s2 || s2 === s3 || s1 === s3) {
+                // Даём выигрыш только для 🍒 или 7️⃣ (редких)
+                if(s1 === "🍒" || s2 === "🍒" || s3 === "🍒" ||
+                   s1 === "7️⃣" || s2 === "7️⃣" || s3 === "7️⃣") {
+                    const baseWin = bet * 2;
+                    return applyHouseEdge(baseWin, bet);
+                }
+                // Для остальных — 0 (даже при двух совпадениях!)
+                return 0;
             }
-            if((s1 === "🍒" && s2 === "🍒") || (s2 === "🍒" && s3 === "🍒")) return bet * -2;
+            
+            // 🎁 Микро-возврат за наличие 7️⃣ (чтобы не было совсем обидно)
             if(s1 === "7️⃣" || s2 === "7️⃣" || s3 === "7️⃣") {
-                if(s1 !== "7️⃣" && s2 !== "7️⃣" && s3 !== "7️⃣") {}
-                else return Math.floor(bet * -1);
+                return Math.floor(bet * 0.1); // 10% возврата
             }
+            
             return 0;
         }
         
-        // Анимация прокрутки
+        // === ИСПРАВЛЕННАЯ АНИМАЦИЯ (с "подкруткой" результата) ===
         async function spinSlots() {
             if(isSpinning) return;
             if(balance < currentBet) {
@@ -695,9 +853,34 @@
             lastWin = 0;
             updateUI();
             
+            // === ПРЕДВАРИТЕЛЬНЫЙ РАСЧЁТ РЕЗУЛЬТАТА (для "честной" подкрутки) ===
+            // С шансом 88% — гарантированный проигрыш
+            const forceLoss = Math.random() < 0.88;
+            let predeterminedSymbols;
+            
+            if(forceLoss) {
+                // Генерируем заведомо проигрышную комбинацию
+                const losingSymbols = ["🍋", "🍊", "🍇", "🔔", "⭐"];
+                predeterminedSymbols = [
+                    losingSymbols[Math.floor(Math.random() * losingSymbols.length)],
+                    losingSymbols[Math.floor(Math.random() * losingSymbols.length)],
+                    losingSymbols[Math.floor(Math.random() * losingSymbols.length)]
+                ];
+                // Но делаем так, чтобы выглядело "почти выигрышно" (2 совпадения из "дешёвых")
+                if(Math.random() < 0.4) {
+                    const same = losingSymbols[Math.floor(Math.random() * 3)];
+                    predeterminedSymbols[0] = same;
+                    predeterminedSymbols[1] = same;
+                }
+            } else {
+                // 12% шанс на реальный выигрыш
+                predeterminedSymbols = null; // Будет сгенерирован случайно
+            }
+            // ==========
+            
             let finalSymbols = ["", "", ""];
-            const spinDuration = [450, 550, 650];
-            const spinSteps = 15;
+            const spinDuration = [400, 520, 640];
+            const spinSteps = 14;
             
             function animateReel(index, durationMs, callbackFinal) {
                 const canvasCtx = [ctx0, ctx1, ctx2][index];
@@ -711,7 +894,9 @@
                     step++;
                     if(step >= steps) {
                         clearInterval(rollingInterval);
-                        const finalSym = getRandomSymbol();
+                        
+                        // === ПРИМЕНЯЕМ ПРЕДОПРЕДЕЛЁННЫЙ РЕЗУЛЬТАТ ===
+                        const finalSym = predeterminedSymbols ? predeterminedSymbols[index] : getRandomSymbol();
                         finalSymbols[index] = finalSym;
                         drawSymbol(canvasCtx, finalSym, 120, 120);
                         if(callbackFinal) callbackFinal();
@@ -731,9 +916,13 @@
                         balance += winAmount;
                         winSpan.innerText = winAmount;
                         
+                        // === СКРИМЕР ПРИ ВЫИГРЫШЕ ===
+                        if(winAmount >= currentBet * 5) {
+                            triggerScreamer(winAmount);
+                        }
+                        
                         if(winAmount === JACKPOT_AMOUNT) {
-                            showNotification("🎉🎉 ДЖЕКПОТ 7K! 5000 🎉🎉", true);
-                            // Золотой эффект на барабанах
+                            showNotification("🎉🎉 НЕВЕРОЯТНО! ДЖЕКПОТ 7K! 🎉🎉", true);
                             [ctx0, ctx1, ctx2].forEach(ctx => {
                                 ctx.fillStyle = "rgba(255, 215, 0, 0.7)";
                                 ctx.globalAlpha = 0.5;
@@ -742,12 +931,17 @@
                             });
                             setTimeout(() => updateAllReelsDisplay(), 200);
                         } else if(winAmount >= currentBet*5) {
-                            showNotification(`🔥 Крупный выигрыш: ${winAmount}!`);
+                            showNotification(`🔥 ОГО! Выигрыш: ${winAmount}!`);
                         } else {
-                            showNotification(`✅ Выигрыш: ${winAmount}`);
+                            showNotification(`✅ Мелочь, а приятно: ${winAmount}`);
                         }
                     } else {
                         winSpan.innerText = "0";
+                        // Частые "почти-выигрыши" для психологического эффекта
+                        if(currentSymbols[0] === currentSymbols[1] || 
+                           currentSymbols[1] === currentSymbols[2]) {
+                            showNotification("🤏 Почти! В следующий раз повезёт!");
+                        }
                     }
                     
                     updateUI();
@@ -755,7 +949,7 @@
                     updateAllReelsDisplay();
                     
                     if(balance <= 0) {
-                        showNotification("💸 Баланс исчерпан! Нажмите СБРОС");
+                        showNotification("💸 Баланс исчерпан! Казино говорит: 'Приходи ещё!' 😉");
                         spinBtn.disabled = true;
                     }
                 }
@@ -789,13 +983,13 @@
             balance = 1000;
             currentBet = 50;
             lastWin = 0;
-            currentSymbols = ["🍒", "🍒", "🍒"];
+            currentSymbols = ["🍋", "🍋", "🍋"];
             updateAllReelsDisplay();
             updateUI();
             isSpinning = false;
             if(spinInterval) clearInterval(spinInterval);
             spinBtn.disabled = false;
-            showNotification("🔄 Игра сброшена | Удачи в 7K!");
+            showNotification("🔄 Игра сброшена | Пусть удача будет с... казино! 😏");
         }
         
         // Инициализация
@@ -804,32 +998,56 @@
             updateUI();
         }
         
-        // Обработчики
-        spinBtn.addEventListener('click', () => {
+        // === ИСПРАВЛЕННЫЕ ОБРАБОТЧИКИ (mobile-friendly) ===
+        function bindTap(element, handler) {
+            // Поддержка и touch, и click, с предотвращением дублей
+            let lastTouchEnd = 0;
+            
+            element.addEventListener('touchend', function(e) {
+                e.preventDefault();
+                e.stopPropagation();
+                const now = Date.now();
+                if(now - lastTouchEnd <= 300) return; // Защита от дублей
+                lastTouchEnd = now;
+                handler(e);
+            }, {passive: false});
+            
+            element.addEventListener('click', function(e) {
+                // Игнорируем click если был недавний touchend
+                const now = Date.now();
+                if(now - lastTouchEnd <= 350) return;
+                handler(e);
+            });
+        }
+        
+        // Привязываем обработчики
+        bindTap(spinBtn, () => {
             if(!isSpinning && balance >= currentBet) {
+                // Инициализируем аудио при первом нажатии (требование браузеров)
+                initAudio();
                 spinSlots().catch(e=>console.warn(e));
             } else if(balance < currentBet) {
                 showNotification("⚠️ Увеличьте баланс или уменьшите ставку");
             }
         });
         
-        decreaseBetBtn.addEventListener('click', () => changeBet(-10));
-        increaseBetBtn.addEventListener('click', () => changeBet(10));
-        resetBtn.addEventListener('click', () => resetGame());
+        bindTap(decreaseBetBtn, () => changeBet(-10));
+        bindTap(increaseBetBtn, () => changeBet(10));
+        bindTap(resetBtn, () => resetGame());
         
-        // Мобильные тач-события
-        const container = document.querySelector('.slot-machine');
-        container.addEventListener('touchstart', (e) => {
-            if(e.target === spinBtn || e.target.closest('#spinButton')) {
-                e.preventDefault();
-                if(!isSpinning && balance >= currentBet) spinSlots();
+        // Также поддерживаем обычные click для десктопа
+        spinBtn.addEventListener('click', (e) => {
+            if(e.pointerType !== 'touch' && !isSpinning && balance >= currentBet) {
+                initAudio();
+                spinSlots().catch(e=>console.warn(e));
             }
-        }, {passive: false});
+        });
         
         // Горячие клавиши
         window.addEventListener('keydown', (e) => {
             if(e.code === 'Space' && !isSpinning && balance >= currentBet) {
                 e.preventDefault();
+                initAudio();
                 spinSlots();
             }
             if(e.code === 'ArrowUp') { e.preventDefault(); changeBet(10); }
@@ -849,8 +1067,12 @@
         }, 700);
         
         // Запуск
-        console.log("🎰👯‍♂️👯‍♂️ 7K Casino Slot Simulator Loaded | Good Luck! ✨");
+        console.log("🎰 7K Casino Loaded | House Edge: 88% | Good luck... you'll need it! 😈");
         initDisplay();
+        
+        // Предварительная инициализация аудио (требует взаимодействия пользователя)
+        document.addEventListener('click', initAudio, {once: true});
+        document.addEventListener('touchstart', initAudio, {once: true});
     })();
 </script>
 </body>
