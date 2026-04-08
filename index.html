@@ -170,7 +170,7 @@
             left: 20px;
             font-size: 1.8rem;
             font-weight: bold;
-            font-family: 'Orbitron', monospace;
+            font-family: spinCounter, monospace;
             color: #ffd700;
             text-shadow: 0 0 10px #8b0000;
             z-index: 10;
@@ -306,7 +306,7 @@
 
 <script>
     const SYMBOLS = ["🍒", "🍋", "🍊", "🍉", "🔔", "⭐", "💀"];
-    const SYMBOL_WEIGHTS = [25, 25, 20, 15, 10, 8, 2];
+    const SYMBOL_WEIGHTS = [25, 20, 20, 10, 10, 10, 5];
     const JACKPOT = 5000;
 
     let weightedPool = [];
@@ -636,7 +636,7 @@
 
     function resetGame() {
         if (isSpinning) return;
-        balance = 1000;
+        balance = 10000;
         currentBet = 50;
         lastWin = 0;
         spinCounter = 0;
