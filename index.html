@@ -4,12 +4,11 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, maximum-scale=1">
     <title>7K Casino | HORROR EDITION</title>
-    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Rajdhani:wght@400;600;700&family=Creepster&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Rajdhani:wght@400;600;700&display=swap" rel="stylesheet">
     <style>
         * {
             user-select: none;
             -webkit-tap-highlight-color: transparent;
-            -webkit-touch-callout: none;
             box-sizing: border-box;
             margin: 0;
             padding: 0;
@@ -19,277 +18,491 @@
             --7k-gold: #ffd700;
             --7k-gold-dark: #b8860b;
             --7k-purple: #6b1b6b;
-            --7k-purple-dark: #3d0d3d;
             --7k-black: #0a0a0f;
-            --7k-dark: #12121a;
-            --7k-glow: 0 0 20px rgba(255, 215, 0, 0.6), 0 0 40px rgba(107, 27, 107, 0.4);
             --7k-red: #8b0000;
-            --7k-blood: #5a0000;
             --7k-blood-bright: #cc0000;
         }
 
         body {
-            background:
-                radial-gradient(ellipse at top, #1a000a 0%, var(--7k-black) 50%),
-                linear-gradient(135deg, #0f0005, #300010, #24000a);
+            background: radial-gradient(ellipse at top, #1a000a 0%, #0a0a0f 50%);
             min-height: 100vh;
             display: flex;
             justify-content: center;
             align-items: center;
-            font-family: 'Rajdhani', 'Segoe UI', sans-serif;
+            font-family: 'Rajdhani', sans-serif;
             margin: 0;
             padding: 15px;
-            overflow-x: hidden;
             position: relative;
         }
 
-        /* === КРОВАВЫЕ ПОДТЁКИ НА ФОНЕ === */
         body::before {
             content: '';
             position: fixed;
             top: 0; left: 0; right: 0; bottom: 0;
-            background-image:
-                radial-gradient(ellipse 15px 80px at 5% 10%, rgba(139,0,0,0.8), transparent 70%),
-                radial-gradient(ellipse 10px 60px at 12% 25%, rgba(139,0,0,0.6), transparent 70%),
-                radial-gradient(ellipse 20px 100px at 95% 15%, rgba(139,0,0,0.9), transparent 70%),
-                radial-gradient(ellipse 12px 70px at 88% 35%, rgba(139,0,0,0.7), transparent 70%),
-                radial-gradient(ellipse 8px 50px at 3% 60%, rgba(139,0,0,0.5), transparent 70%),
-                radial-gradient(ellipse 15px 90px at 92% 70%, rgba(139,0,0,0.8), transparent 70%),
-                radial-gradient(circle 25px at 15% 45%, rgba(204,0,0,0.4), transparent 80%),
-                radial-gradient(circle 18px at 85% 55%, rgba(204,0,0,0.3), transparent 80%),
-                radial-gradient(circle 30px at 50% 85%, rgba(139,0,0,0.5), transparent 80%),
-                radial-gradient(2px 2px at 20px 30px, var(--7k-gold), transparent),
-                radial-gradient(2px 2px at 40px 70px, rgba(255,215,0,0.3), transparent),
-                radial-gradient(2px 2px at 90px 40px, var(--7k-purple), transparent);
-            background-size: repeat;
-            animation: blood-drip 12s ease-in-out infinite, sparkle 8s linear infinite;
-            opacity: 1;
+            background-image: radial-gradient(ellipse 15px 80px at 5% 10%, rgba(139,0,0,0.4), transparent 70%);
             pointer-events: none;
             z-index: -1;
         }
 
-        @keyframes blood-drip {
-            /* Анимация стекающей крови */
+        .slot-machine {
+            background: linear-gradient(145deg, #1a0a0a, #0d0505);
+            border-radius: 60px;
+            padding: 20px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.6), inset 0 1px 2px rgba(255,215,0,0.3);
+            border: 1px solid #8b0000;
         }
 
-        body::after {
-            content: '';
+        .display-area {
+            background: #0a0505;
+            border-radius: 40px;
+            padding: 20px;
+            box-shadow: inset 0 0 20px #000;
+        }
+
+        .reels-container {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+        }
+
+        .reel {
+            background: #1a0a0a;
+            border-radius: 20px;
+            padding: 10px;
+            box-shadow: inset 0 0 0 2px #8b0000, 0 5px 15px black;
+        }
+
+        canvas {
+            display: block;
+            width: 100px;
+            height: 100px;
+            background: #2a1a1a;
+            border-radius: 15px;
+        }
+
+        .info-panel {
+            display: flex;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 10px;
+            background: #1a0a0aaa;
+            backdrop-filter: blur(8px);
+            padding: 12px;
+            border-radius: 30px;
+            margin-bottom: 15px;
+        }
+
+        .balance-box, .bet-box, .win-box {
+            background: #000000aa;
+            padding: 5px 15px;
+            border-radius: 25px;
+            font-size: 1.2rem;
+            font-weight: bold;
+            color: #ffd700;
+        }
+
+        .balance-box span, .bet-box span, .win-box span {
+            font-size: 0.8rem;
+            color: #cc8888;
+            margin-right: 5px;
+        }
+
+        .jackpot-light {
+            background: linear-gradient(45deg, #8b0000, #cc0000);
+            border: none;
+            padding: 5px 15px;
+            border-radius: 25px;
+            font-weight: bold;
+            color: #ffd700;
+            cursor: pointer;
+        }
+
+        .controls {
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        button {
+            background: linear-gradient(to bottom, #8b0000, #3a0000);
+            border: none;
+            font-size: 1rem;
+            font-weight: bold;
+            padding: 8px 20px;
+            border-radius: 30px;
+            color: #ffd700;
+            cursor: pointer;
+            transition: 0.05s linear;
+            box-shadow: 0 3px 0 #2a0000;
+            font-family: inherit;
+        }
+
+        button:active {
+            transform: translateY(2px);
+            box-shadow: 0 1px 0 #2a0000;
+        }
+
+        .spin-btn {
+            background: linear-gradient(to bottom, #cc0000, #6b0000);
+            font-size: 1.2rem;
+            padding: 8px 25px;
+        }
+
+        button:disabled {
+            opacity: 0.5;
+            transform: none;
+            cursor: not-allowed;
+        }
+
+        .rules-footer {
+            text-align: center;
+            margin-top: 15px;
+            font-size: 0.7rem;
+            color: #aa5555;
+        }
+
+        .casino-logo {
+            position: fixed;
+            top: 10px;
+            left: 20px;
+            font-size: 1.8rem;
+            font-weight: bold;
+            font-family: 'Orbitron', monospace;
+            color: #ffd700;
+            text-shadow: 0 0 10px #8b0000;
+            z-index: 10;
+        }
+
+        .casino-logo span { color: #cc0000; font-size: 2rem; }
+
+        .notification {
+            position: fixed;
+            top: 70px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: #8b0000dd;
+            color: #ffd700;
+            padding: 8px 20px;
+            border-radius: 30px;
+            font-weight: bold;
+            opacity: 0;
+            transition: opacity 0.3s;
+            z-index: 100;
+            pointer-events: none;
+        }
+
+        .notification.show { opacity: 1; }
+
+        .screamer-overlay {
             position: fixed;
             top: 0; left: 0; right: 0; bottom: 0;
-            background:
-                linear-gradient(180deg, transparent 35%, rgba(139,27,27, .1) 65%, transparent),
-                radial-gradient(ellipse at center, transparent calc(49%), rgba(94,16,16,.4) calc(85%), rgba(44,8,8,.6));
-            pointer-events: none;
-            z-index: -1;
+            background: #000000ee;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            opacity: 0;
+            visibility: hidden;
+            transition: 0.2s;
         }
 
-        /* ... [ОСТАЛЬНЫЕ СТИЛИ ИЗ ПРЕДЫДУЩЕГО ОТВЕТА] ... */
+        .screamer-overlay.show {
+            opacity: 1;
+            visibility: visible;
+        }
 
-        /* === КРОВАВЫЙ ДОЖДЬ === */
-        .blood-rain {
+        .screamer-face {
+            font-size: 5rem;
+            animation: shake 0.2s infinite;
+        }
+
+        .screamer-text {
+            color: #ff0000;
+            font-size: 1.5rem;
+            text-align: center;
+            margin: 20px;
+            font-family: 'Creepster', cursive;
+        }
+
+        .screamer-close {
+            background: #8b0000;
+            padding: 10px 30px;
+            font-size: 1.2rem;
+        }
+
+        .sound-toggle {
             position: fixed;
-            top: -2px; left: -2px; right: -2px; bottom: -2px;
-            pointer-events: none;
-            z-index: -2;
-        }
-        .blood-drop {
-            position: absolute;
-            width: var(--drop-size);
-            height: var(--drop-size);
-            background-color: rgba(255,255,255,.1);
-            border-radius: var(--drop-radius);
-            opacity: var(--drop-opacity);
-            animation-timing-function: cubic-bezier(.68,-.55,.26,1.55);
+            bottom: 20px;
+            right: 20px;
+            background: #1a0a0a;
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            font-size: 1.5rem;
+            padding: 0;
+            z-index: 10;
         }
 
-        /* ... [КЛАССЫ ДЛЯ СКРИМЕРА И КНОПОК] ... */
+        @keyframes shake {
+            0%, 100% { transform: translate(0,0); }
+            25% { transform: translate(-5px,5px); }
+            75% { transform: translate(5px,-5px); }
+        }
 
+        @media (max-width: 600px) {
+            canvas { width: 70px; height: 70px; }
+            .balance-box, .bet-box, .win-box { font-size: 0.9rem; padding: 3px 10px; }
+            button { padding: 5px 12px; font-size: 0.8rem; }
+            .spin-btn { font-size: 1rem; }
+            .casino-logo { font-size: 1.2rem; top: 5px; left: 10px; }
+        }
     </style>
 </head>
 <body>
-    <!-- Кровавый дождь -->
-    <div class="blood-rain" id="bloodRain"></div>
 
-    <!-- Декоративные элементы (ужас) -->
-    <div class="decoration dec-1">🩸</div>
-    <div class="decoration dec-2">👁️</div>
-    <div class="decoration dec-3">💀</div>
-    <div class="decoration dec-4">🕯️</div>
-
-    <!-- Логотип -->
     <div class="casino-logo">7<span>K</span> CASINO</div>
+    <div class="notification" id="notification">🩸</div>
 
-    <!-- Уведомления -->
-    <div class="notification" id="notification"></div>
-
-    <!-- СКРИМЕР -->
     <div class="screamer-overlay" id="screamer">
-        <div class="screamer-face">😱👹🩸💀🔪</div>
-        <div class="screamer-text">ТЫ ВЫИГРАЛ...<br>НО ОНИ ТЕПЕРЬ ЗНАЮТ... 🔥</div>
+        <div class="screamer-face">😱👹🩸💀</div>
+        <div class="screamer-text">ТЫ ВЫИГРАЛ ДЖЕКПОТ...<br>НО ОНИ ТЕПЕРЬ ЗНАЮТ...</div>
         <button class="screamer-close" id="screamerClose">ЗАБРАТЬ И БЕЖАТЬ</button>
     </div>
 
-    <!-- Кнопка звука -->
-    <button class="sound-toggle" id="soundToggle" title="Вкл/Выкл звук"></button>
+    <button class="sound-toggle" id="soundToggle">🔊</button>
 
-    <!-- Основной контейнер -->
     <div class="slot-machine">
         <div class="display-area">
-             <div class="reels-container" id="reelsContainer">
-                <div class="reel"><canvas id="reel_1" width="128" height="128"></canvas></div>
-                <div class="reel"><canvas id="reel_2" width="128" height="128"></canvas></div>
-                <div class="reel"><canvas id="reel_3" width="128" height="128"></canvas></div>
-             </div>
+            <div class="reels-container">
+                <div class="reel"><canvas id="reel0" width="128" height="128"></canvas></div>
+                <div class="reel"><canvas id="reel1" width="128" height="128"></canvas></div>
+                <div class="reel"><canvas id="reel2" width="128" height="128"></canvas></div>
+            </div>
 
-             <div class="info-panel">
-                 <div class="balance-box"><span>🩸 БАЛАНС</span><span id="balanceAmount">1599</span></div>
-                 <div class="bet-box"><span>💀 СТАВКА</span><span id="betAmount">5</span></div>
-                 <div class="win-box"><span>👁️ ВЫИГРЫШ</span><span id="winAmount">$</span></div>
-                 <button class="jackpot-light" id="jackpotIndicator">🔥 ДЖЕКПОТ 🔥</button>
-             </div>
+            <div class="info-panel">
+                <div class="balance-box"><span>🩸 БАЛАНС</span> <span id="balanceAmount">1000</span></div>
+                <div class="bet-box"><span>💀 СТАВКА</span> <span id="betAmount">50</span></div>
+                <div class="win-box"><span>👁️ ВЫИГРЫШ</span> <span id="winAmount">0</span></div>
+                <button class="jackpot-light" id="jackpotIndicator">🔥 ДЖЕКПОТ: 5000 🔥</button>
+            </div>
 
-             <div class="controls">
-                 <button id="decreaseBet">− СТАВКА</button>
-                 <button id="increaseBet">+ СТАВКА</button>
-                 <button id="spinButton" class="spin-btn">🩸 RISK SPIN 🩸</button>
-                 <button id="resetGame">🔄 СБРОС</button>
-             </div>
-             
-             <p class="rules-footer">
-                 <strong>ПРАВИЛА:</strong> Шанс победы ~8% | <br>3×💀 = ДЖЕКПОТ | <br>3×🍒 = ×7 | <br>2×совпадения = ×2 | <br><em>Казино всегда голодно... 🩸</em>
-             </p>
-         </div>
-     </div>
+            <div class="controls">
+                <button id="decreaseBet">− СТАВКА</button>
+                <button id="increaseBet">+ СТАВКА</button>
+                <button id="spinButton" class="spin-btn">🩸 КРУТИТЬ 🩸</button>
+                <button id="resetGame">🔄 СБРОС</button>
+            </div>
+
+            <p class="rules-footer">
+                <strong>ПРАВИЛА:</strong> 3×💀 = ДЖЕКПОТ (5000) | 3 одинаковых = ×5 | 2 одинаковых = ×2
+            </p>
+        </div>
+    </div>
 
 <script>
-const SYMBOLS = ["🍋", "🍊", "🍇", "🔔", "⭐", "🍒", "💀"];
-const SYMBOL_WEIGHTS = [45, 43, 38, 33, 28, 3.5, .5];
-const JACKPOT_AMOUNT = "ДЖЕКПОТ";
-let weightedPool = [];
-for(let i=SYMBOLS.length;i--;) for(let w=SYMBOL_WEIGHTS[i];w--;) weightedPool.push(SYMBOLS[i]);
-function getRandomSymbol(){ return weightedPool[Math.floor(Math.random()*weightedPool.length)]; }
-const HOUSE_EDGE_CHANCE = .9; // Высокий риск
+    const SYMBOLS = ["🍒", "🍋", "🍊", "🍉", "🔔", "⭐", "💀"];
+    const SYMBOL_WEIGHTS = [25, 25, 20, 15, 10, 8, 2];
+    const JACKPOT = 5000;
 
-let balance = parseInt(localStorage.getItem('balance')) || Math.floor(Math.random()*3666+666);
-let currentBet = parseInt(localStorage.getItem('bet')) || Math.floor(Math.random()*46+5);
-let lastWin = "$";
-let isSpinning = false;
-let spinInterval = null;
-let currentSymbols = ["🍋", "🍋", "🍋"];
-let isMuted = false;
-let isMusicPlaying = false;
-let audioCtx = null;
-let bgMusicGain = null;
-let bgMusicOscillators = [];
-
-// DOM Elements
-const balanceSpan = document.getElementById('balanceAmount');
-const betSpan = document.getElementById('betAmount');
-const winSpan = document.getElementById('winAmount');
-const spinBtn = document.getElementById('spinButton');
-const decreaseBetBtn = document.getElementById('decreaseBet');
-const increaseBetBtn = document.getElementById('increaseBet');
-const resetBtn = document.getElementById('resetGame');
-const jackpotIndicator = document.getElementById('jackpotIndicator');
-const notification = document.getElementById('notification');
-const screamer = document.getElementById('screamer');
-const screamerClose = document.getElementById('screamerClose');
-const soundToggle = document.getElementById('soundToggle');
-
-// Canvas Setup (для старых браузеров)
-function getCanvas(id){
-    let el = document.getElementById(id);
-    if(!el.getContext) el = { getContext(){ return { clearRect(){}, fillText(){} }; } };
-    return el.getContext('2d');
-}
-const ctx_1 = getCanvas("reel_1");
-const ctx_2 = getCanvas("reel_2");
-const ctx_3 = getCanvas("reel_3");
-
-// Аудио система
-function initAudio(){
-    if(audioCtx) return;
-    try{ audioCtx = new (window.AudioContext || window.webkitAudioContext)(); setupBackgroundMusic(); }catch(e){}
-}
-function setupBackgroundMusic(){
-    if(!audioCtx) return;
-    
-    bgMusicGain = audioCtx.createGain();
-    bgMusicGain.gain.value = isMuted ? 0 : .1;
-    bgMusicGain.connect(audioCtx.destination);
-    
-    const drone = audioCtx.createOscillator();
-    drone.type = 'sine';
-    drone.frequency.setValueAtTime(43.65 + Math.random(), audioCtx.currentTime); // Низкий гул
-    drone.connect(bgMusicGain);
-    drone.start();
-    
-    const dissonant = audioCtx.createOscillator();
-    dissonant.type = 'triangle';
-    dissonant.frequency.setValueAtTime(drone.frequency.value * Math.pow(2,(Math.random()-.5)/6), audioCtx.currentTime);
-    const disGain = audioCtx.createGain();
-    disGain.gain.value = .1 * Math.random();
-    dissonant.connect(disGain).connect(bgMusicGain);
-    dissonant.start();
-    
-    bgMusicOscillators.push(drone);
-    
-    function heartbeat(){
-        if(!isMusicPlaying || isMuted){ setTimeout(heartbeat, (Math.random()+.5)*2e3); return; }
-        
-        const heartOsc = audioCtx.createOscillator();
-        const heartGain = audioCtx.createGain();
-        
-        heartOsc.type = 'sine';
-        heartOsc.frequency.setValueAtTime(Math.random()*4+38 + Math.random()*Math.random()*Math.random()*Math.random(), audioCtx.currentTime);
-        
-        heartGain.gain.setValueAtTime(.4*Math.random(), audioCtx.currentTime);
-        heartGain.gain.linearRampToValueAtTime(.4*Math.random(), audioCtx.currentTime + .1*Math.random());
-        heartGain.gain.linearRampToValueAtTime(.4*Math.random(), audioCtx.currentTime + .4*Math.random());
-        
-        heartOsc.connect(heartGain).connect(bgMusicGain);
-        
-        heartOsc.start();
-        heartOsc.stop(audioCtx.currentTime + .6*Math.random());
-        
-        setTimeout(heartbeat, (Math.random()+.5)*2e3);
+    let weightedPool = [];
+    for (let i = 0; i < SYMBOLS.length; i++) {
+        for (let w = 0; w < SYMBOL_WEIGHTS[i]; w++) {
+            weightedPool.push(SYMBOLS[i]);
+        }
     }
-    
-    function randomAmbience(){
-        if(!isMusicPlaying || isMuted){ setTimeout(randomAmbience, (Math.random()+.5)*4e3); return; }
-        
-        const type = Math.random();
-        
-        if(type < .4){
-             // Скрип / Визг
-             const squeak = audioCtx.createOscillator();
-             const squeakGain = audioCtx.createGain();
-             squeak.type = 'sawtooth';
-             squeak.frequency.setValueAtTime(Math.random()*Math.random()*Math.random()*Math.random()*Math.random()*Math.random()*Math.random()*Math.random()*Math.random()*Math.random()*Math.random()*Math.random()*Math.random()*Math.random() + Math.random() + Math.random() + Math.random() + Math.random() + Math.random() + Math.random(), audioCtx.currentTime);
-             squeak.frequency.exponentialRampToValueAtTime(squeak.frequency.value * .9 * .9 * .9 * .9 * .9 * .9 * .9 * .9 * .9 * .9 * .9 * .9 * .9 * .9 * .9 * .9 * .9 * .9 * .9 * Math.random(), audioCtx.currentTime + Math.random()*.6);
-             
-             squeakGain.gain.setValueAtTime(.4*Math.random(), audioCtx.currentTime);
-             squeakGain.gain.linearRampToValueAtTime(.4*Math.random(), audioCtx.currentTime + Math.random()*.3);
-             squeakGain.gain.linearRampToValueAtTime(.4*Math.random(), audioCtx.currentTime + Math.random()*.6);
-             
-             squeak.connect(squeakGain).connect(bgMusicGain);
-             squeak.start();
-             squeak.stop(audioCtx.currentTime + Math.random()*.6);
-            
-         } else if(type < .7){
-             // Гул / Рёв
-             const rumble = audioCtx.createOscillator();
-             const rumbleGain = audioCtx.createGain();
-             
-             rumble.type = 'square';
-             rumble.frequency.setValueAtTime(Math.random()*Math.random()*Math.random()*Math.random()*Math.random()*Math.random()*Math.random()*Math.random()*Math.random()*Math.random() + Math.random() + Math.random() + Math.random() + Math.random() + Math.random() + Math.random(), audioCtx.currentTime);
-             
-             rumbleGain.gain.setValueAtTime(.4*Math.random(), audioCtx.currentTime);
-             rumbleGain.gain.exponentialRampToValueAtTime(.4*Math.random(), audioCtx.currentTime + Math.random()*.8);
-             
-             rumble.connect(rumbleGain).connect(bgMusicGain);
-             rumble.start();
-             rumble.stop(audioCtx.currentTime + Math.random()*.8);
-         }
-         
-         setTimeout(randomAmbience, (Math.random
+
+    function getRandomSymbol() {
+        return weightedPool[Math.floor(Math.random() * weightedPool.length)];
+    }
+
+    let balance = 1000;
+    let currentBet = 50;
+    let lastWin = 0;
+    let isSpinning = false;
+    let currentSymbols = ["🍒", "🍒", "🍒"];
+    let isMuted = false;
+
+    const balanceSpan = document.getElementById('balanceAmount');
+    const betSpan = document.getElementById('betAmount');
+    const winSpan = document.getElementById('winAmount');
+    const spinBtn = document.getElementById('spinButton');
+    const decreaseBetBtn = document.getElementById('decreaseBet');
+    const increaseBetBtn = document.getElementById('increaseBet');
+    const resetBtn = document.getElementById('resetGame');
+    const jackpotIndicator = document.getElementById('jackpotIndicator');
+    const notification = document.getElementById('notification');
+    const screamer = document.getElementById('screamer');
+    const screamerClose = document.getElementById('screamerClose');
+    const soundToggle = document.getElementById('soundToggle');
+
+    const canvas0 = document.getElementById('reel0');
+    const canvas1 = document.getElementById('reel1');
+    const canvas2 = document.getElementById('reel2');
+    const ctx0 = canvas0.getContext('2d');
+    const ctx1 = canvas1.getContext('2d');
+    const ctx2 = canvas2.getContext('2d');
+
+    function drawSymbol(ctx, symbol, w, h) {
+        ctx.clearRect(0, 0, w, h);
+        ctx.fillStyle = '#2a1a1a';
+        ctx.fillRect(0, 0, w, h);
+        ctx.fillStyle = '#8b0000';
+        ctx.strokeStyle = '#ffd700';
+        ctx.lineWidth = 2;
+        ctx.strokeRect(5, 5, w-10, h-10);
+        ctx.font = `bold ${Math.floor(h * 0.55)}px "Segoe UI Emoji"`;
+        ctx.textAlign = "center";
+        ctx.textBaseline = "middle";
+        ctx.fillStyle = '#ffd700';
+        ctx.fillText(symbol, w/2, h/2);
+    }
+
+    function updateReels() {
+        drawSymbol(ctx0, currentSymbols[0], 128, 128);
+        drawSymbol(ctx1, currentSymbols[1], 128, 128);
+        drawSymbol(ctx2, currentSymbols[2], 128, 128);
+    }
+
+    function updateUI() {
+        balanceSpan.innerText = Math.floor(balance);
+        betSpan.innerText = currentBet;
+        winSpan.innerText = lastWin;
+        if (balance < currentBet || isSpinning) {
+            spinBtn.disabled = true;
+        } else {
+            spinBtn.disabled = false;
+        }
+        if (balance <= 0) {
+            spinBtn.disabled = true;
+        }
+    }
+
+    function showNotification(msg, isError = false) {
+        notification.innerText = msg;
+        notification.classList.add('show');
+        setTimeout(() => notification.classList.remove('show'), 2000);
+    }
+
+    function calculateWin(symbols, bet) {
+        const [s1, s2, s3] = symbols;
+        if (s1 === "💀" && s2 === "💀" && s3 === "💀") {
+            return JACKPOT;
+        }
+        if (s1 === s2 && s2 === s3) {
+            let mult = 5;
+            if (s1 === "⭐" || s1 === "🔔") mult = 7;
+            return bet * mult;
+        }
+        if (s1 === s2 || s2 === s3 || s1 === s3) {
+            return bet * 2;
+        }
+        return 0;
+    }
+
+    function showScreamer() {
+        screamer.classList.add('show');
+        setTimeout(() => {
+            if (screamer.classList.contains('show')) {
+                screamer.classList.remove('show');
+            }
+        }, 4000);
+    }
+
+    function spin() {
+        if (isSpinning) return;
+        if (balance < currentBet) {
+            showNotification("❌ Недостаточно средств!", true);
+            return;
+        }
+
+        isSpinning = true;
+        balance -= currentBet;
+        lastWin = 0;
+        updateUI();
+
+        let spins = 0;
+        const totalSpins = 12;
+        const interval = setInterval(() => {
+            const r1 = getRandomSymbol();
+            const r2 = getRandomSymbol();
+            const r3 = getRandomSymbol();
+            drawSymbol(ctx0, r1, 128, 128);
+            drawSymbol(ctx1, r2, 128, 128);
+            drawSymbol(ctx2, r3, 128, 128);
+            spins++;
+            if (spins >= totalSpins) {
+                clearInterval(interval);
+                const final1 = getRandomSymbol();
+                const final2 = getRandomSymbol();
+                const final3 = getRandomSymbol();
+                currentSymbols = [final1, final2, final3];
+                updateReels();
+                
+                const win = calculateWin(currentSymbols, currentBet);
+                lastWin = win;
+                if (win > 0) {
+                    balance += win;
+                    showNotification(`🎉 ВЫИГРЫШ: ${win} 🎉`);
+                    if (win === JACKPOT) {
+                        showScreamer();
+                        showNotification("💀 ДЖЕКПОТ! 💀");
+                    }
+                } else {
+                    showNotification("😭 ПРОИГРЫШ...", true);
+                }
+                updateUI();
+                isSpinning = false;
+            }
+        }, 60);
+    }
+
+    function changeBet(delta) {
+        if (isSpinning) return;
+        let newBet = currentBet + delta;
+        if (newBet >= 10 && newBet <= Math.min(500, balance > 0 ? balance : 500)) {
+            currentBet = newBet;
+        } else if (newBet < 10) {
+            currentBet = 10;
+        } else if (newBet > balance && balance > 0) {
+            currentBet = balance;
+        }
+        updateUI();
+    }
+
+    function resetGame() {
+        if (isSpinning) return;
+        balance = 1000;
+        currentBet = 50;
+        lastWin = 0;
+        currentSymbols = ["🍒", "🍒", "🍒"];
+        updateReels();
+        updateUI();
+        showNotification("🔄 Игра сброшена!");
+    }
+
+    function toggleSound() {
+        isMuted = !isMuted;
+        soundToggle.innerText = isMuted ? "🔇" : "🔊";
+        showNotification(isMuted ? "Звук выключен" : "Звук включён");
+    }
+
+    spinBtn.addEventListener('click', spin);
+    decreaseBetBtn.addEventListener('click', () => changeBet(-10));
+    increaseBetBtn.addEventListener('click', () => changeBet(10));
+    resetBtn.addEventListener('click', resetGame);
+    soundToggle.addEventListener('click', toggleSound);
+    screamerClose.addEventListener('click', () => {
+        screamer.classList.remove('show');
+    });
+
+    updateReels();
+    updateUI();
+
+    console.log("7K Casino HORROR EDITION — готов к работе!");
+</script>
+</body>
+</html>
