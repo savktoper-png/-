@@ -305,41 +305,34 @@
     </div>
 
 <script>
-    // ========== СИМВОЛЫ И ВЕСА ==========
     const SYMBOLS = ["🍒", "🍋", "🍊", "🍉", "🔔", "⭐", "💀"];
     const SYMBOL_WEIGHTS = [25, 25, 20, 15, 10, 8, 2];
     const JACKPOT = 5000;
 
     let weightedPool = [];
     for (let i = 0; i < SYMBOLS.length; i++) {
-        for (let w = 0; w < SYMBOL_WEIGHTS[i]; w++) {
-            weightedPool.push(SYMBOLS[i]);
-        }
+        for (let w = 0; w < SYMBOL_WEIGHTS[i]; w++) weightedPool.push(SYMBOLS[i]);
     }
 
     function getRandomSymbol() {
         return weightedPool[Math.floor(Math.random() * weightedPool.length)];
     }
 
-    // ========== ИГРОВЫЕ ПЕРЕМЕННЫЕ ==========
     let balance = 1000;
     let currentBet = 50;
     let lastWin = 0;
     let isSpinning = false;
     let currentSymbols = ["🍒", "🍒", "🍒"];
     let isMuted = false;
-    let spinCounter = 0;          // Счётчик спинов для скримера (каждый 20-й)
+    let spinCounter = 0;
     let audioInitialized = false;
-    
-    // ========== АУДИО КОНТЕКСТ ==========
+
     let audioCtx = null;
     let masterGain = null;
     let bgOscillator = null;
     let bgGain = null;
     let isMusicPlaying = false;
-    let musicInterval = null;
-    
-    // DOM элементы
+
     const balanceSpan = document.getElementById('balanceAmount');
     const betSpan = document.getElementById('betAmount');
     const winSpan = document.getElementById('winAmount');
@@ -353,7 +346,6 @@
     const screamerClose = document.getElementById('screamerClose');
     const soundToggle = document.getElementById('soundToggle');
 
-    // Canvas
     const canvas0 = document.getElementById('reel0');
     const canvas1 = document.getElementById('reel1');
     const canvas2 = document.getElementById('reel2');
@@ -361,7 +353,6 @@
     const ctx1 = canvas1.getContext('2d');
     const ctx2 = canvas2.getContext('2d');
 
-    // ========== ОТРИСОВКА ==========
     function drawSymbol(ctx, symbol, w, h) {
         ctx.clearRect(0, 0, w, h);
         ctx.fillStyle = '#2a1a1a';
@@ -382,37 +373,39 @@
         drawSymbol(ctx2, currentSymbols[2], 128, 128);
     }
 
-    // ========== АУДИО СИСТЕМА ==========
-    function initAudio() {
-        if (audioCtx) return;
+    async function initAudio() {
+        if (audioCtx) {
+            if (audioCtx.state === 'suspended') await audioCtx.resume();
+            return;
+        }
         try {
             audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+            if (audioCtx.state === 'suspended') await audioCtx.resume();
             masterGain = audioCtx.createGain();
             masterGain.gain.value = isMuted ? 0 : 0.35;
             masterGain.connect(audioCtx.destination);
             audioInitialized = true;
             startBackgroundMusic();
-        } catch(e) { console.warn("Audio not supported"); }
+        } catch(e) {
+            console.warn("Audio not supported", e);
+        }
     }
-    
-    // Жуткая фоновая музыка (атмосферный дрон + случайные звуки)
+
     function startBackgroundMusic() {
         if (!audioCtx || isMusicPlaying) return;
         isMusicPlaying = true;
-        
-        // Основной гул
+
         bgOscillator = audioCtx.createOscillator();
         bgOscillator.type = 'sine';
         bgOscillator.frequency.setValueAtTime(48 + Math.random() * 8, audioCtx.currentTime);
-        
+
         bgGain = audioCtx.createGain();
         bgGain.gain.value = isMuted ? 0 : 0.12;
-        
+
         bgOscillator.connect(bgGain);
         bgGain.connect(masterGain);
         bgOscillator.start();
-        
-        // Добавляем низкочастотный гул
+
         const subOsc = audioCtx.createOscillator();
         subOsc.type = 'triangle';
         subOsc.frequency.setValueAtTime(36, audioCtx.currentTime);
@@ -421,17 +414,15 @@
         subOsc.connect(subGain);
         subGain.connect(masterGain);
         subOsc.start();
-        
-        // Случайные хоррор-звуки каждые 10-25 секунд
+
         function randomHorrorSound() {
             if (!isMusicPlaying || isMuted || !audioCtx) {
                 setTimeout(randomHorrorSound, 15000);
                 return;
             }
-            const type = Math.random();
             const noise = audioCtx.createOscillator();
             const noiseGain = audioCtx.createGain();
-            noise.type = type < 0.5 ? 'sawtooth' : 'square';
+            noise.type = Math.random() < 0.5 ? 'sawtooth' : 'square';
             noise.frequency.setValueAtTime(80 + Math.random() * 120, audioCtx.currentTime);
             noise.frequency.exponentialRampToValueAtTime(40 + Math.random() * 60, audioCtx.currentTime + 0.8);
             noiseGain.gain.setValueAtTime(0.25, audioCtx.currentTime);
@@ -440,13 +431,12 @@
             noiseGain.connect(masterGain);
             noise.start();
             noise.stop(audioCtx.currentTime + 1.2);
-            
+
             setTimeout(randomHorrorSound, 10000 + Math.random() * 15000);
         }
         randomHorrorSound();
     }
-    
-    // Звук вращения барабанов (короткий шум)
+
     function playSpinSound() {
         if (!audioCtx || isMuted || !audioInitialized) return;
         try {
@@ -464,8 +454,7 @@
             noise.stop(now + 0.4);
         } catch(e) {}
     }
-    
-    // Звук выигрыша
+
     function playWinSound(amount) {
         if (!audioCtx || isMuted || !audioInitialized) return;
         try {
@@ -487,8 +476,7 @@
             osc.stop(now + 0.6);
         } catch(e) {}
     }
-    
-    // Звук проигрыша
+
     function playLoseSound() {
         if (!audioCtx || isMuted || !audioInitialized) return;
         try {
@@ -506,13 +494,11 @@
             osc.stop(now + 0.5);
         } catch(e) {}
     }
-    
-    // Ужасный звук для скримера
+
     function playScreamerSound() {
         if (!audioCtx || isMuted || !audioInitialized) return;
         try {
             const now = audioCtx.currentTime;
-            // Визг
             const osc1 = audioCtx.createOscillator();
             const gain1 = audioCtx.createGain();
             osc1.type = 'sawtooth';
@@ -524,8 +510,7 @@
             gain1.connect(masterGain);
             osc1.start();
             osc1.stop(now + 0.8);
-            
-            // Низкий удар
+
             const osc2 = audioCtx.createOscillator();
             const gain2 = audioCtx.createGain();
             osc2.type = 'square';
@@ -538,74 +523,57 @@
             osc2.stop(now + 0.6);
         } catch(e) {}
     }
-    
-    // ========== UI ФУНКЦИИ ==========
+
     function updateUI() {
         balanceSpan.innerText = Math.floor(balance);
         betSpan.innerText = currentBet;
         winSpan.innerText = lastWin;
-        if (balance < currentBet || isSpinning) {
-            spinBtn.disabled = true;
-        } else {
-            spinBtn.disabled = false;
-        }
-        if (balance <= 0) spinBtn.disabled = true;
+        spinBtn.disabled = balance < currentBet || isSpinning || balance <= 0;
     }
-    
-    function showNotification(msg, isError = false) {
+
+    function showNotification(msg) {
         notification.innerText = msg;
         notification.classList.add('show');
         setTimeout(() => notification.classList.remove('show'), 2000);
     }
-    
+
     function showScreamer() {
         playScreamerSound();
         screamer.classList.add('show');
         setTimeout(() => {
-            if (screamer.classList.contains('show')) {
-                screamer.classList.remove('show');
-            }
+            if (screamer.classList.contains('show')) screamer.classList.remove('show');
         }, 4000);
     }
-    
-    // ========== ЛОГИКА ВЫИГРЫША ==========
+
     function calculateWin(symbols, bet) {
         const [s1, s2, s3] = symbols;
-        if (s1 === "💀" && s2 === "💀" && s3 === "💀") {
-            return JACKPOT;
-        }
+        if (s1 === "💀" && s2 === "💀" && s3 === "💀") return JACKPOT;
         if (s1 === s2 && s2 === s3) {
             let mult = 5;
             if (s1 === "⭐" || s1 === "🔔") mult = 7;
             return bet * mult;
         }
-        if (s1 === s2 || s2 === s3 || s1 === s3) {
-            return bet * 2;
-        }
+        if (s1 === s2 || s2 === s3 || s1 === s3) return bet * 2;
         return 0;
     }
-    
-    // ========== ОСНОВНОЙ СПИН ==========
-    function spin() {
+
+    async function spin() {
         if (isSpinning) return;
         if (balance < currentBet) {
-            showNotification("❌ Недостаточно средств!", true);
+            showNotification("❌ Недостаточно средств!");
             return;
         }
-        
-        // Инициализируем аудио при первом спине (политика автоигра)
-        if (!audioInitialized) {
-            initAudio();
-        }
-        
-        // Проигрываем звук вращения
+
+        if (!audioInitialized) await initAudio();
+        if (audioCtx && audioCtx.state === 'suspended') await audioCtx.resume();
+
         playSpinSound();
-        
+
         isSpinning = true;
         balance -= currentBet;
         lastWin = 0;
         updateUI();
-        
+
         let spins = 0;
         const totalSpins = 12;
         const interval = setInterval(() => {
@@ -616,16 +584,16 @@
             drawSymbol(ctx1, r2, 128, 128);
             drawSymbol(ctx2, r3, 128, 128);
             spins++;
+
             if (spins >= totalSpins) {
                 clearInterval(interval);
-                const final1 = getRandomSymbol();
-                const final2 = getRandomSymbol();
-                const final3 = getRandomSymbol();
-                currentSymbols = [final1, final2, final3];
+
+                currentSymbols = [getRandomSymbol(), getRandomSymbol(), getRandomSymbol()];
                 updateReels();
-                
+
                 const win = calculateWin(currentSymbols, currentBet);
                 lastWin = win;
+
                 if (win > 0) {
                     balance += win;
                     playWinSound(win);
@@ -636,27 +604,23 @@
                     }
                 } else {
                     playLoseSound();
-                    showNotification("😭 ПРОИГРЫШ...", true);
+                    showNotification("😭 ПРОИГРЫШ...");
                 }
-                
-                // Увеличиваем счётчик спинов
+
                 spinCounter++;
                 updateUI();
-                
-                // *** СКРИМЕР КАЖДЫЙ 20-Й СПИН ***
+
                 if (spinCounter % 20 === 0 && spinCounter > 0) {
-                    showNotification("👁️ ТЫ ЧУВСТВУЕШЬ ВЗГЛЯД? 👁️", false);
-                    setTimeout(() => {
-                        showScreamer();
-                    }, 300);
+                    showNotification("👁️ ТЫ ЧУВСТВУЕШЬ ВЗГЛЯД? 👁️");
+                    setTimeout(showScreamer, 300);
                 }
-                
+
                 isSpinning = false;
+                updateUI();
             }
         }, 55);
     }
-    
-    // ========== УПРАВЛЕНИЕ СТАВКОЙ ==========
+
     function changeBet(delta) {
         if (isSpinning) return;
         let newBet = currentBet + delta;
@@ -669,51 +633,46 @@
         }
         updateUI();
     }
-    
+
     function resetGame() {
         if (isSpinning) return;
         balance = 1000;
         currentBet = 50;
         lastWin = 0;
-        spinCounter = 0;   // сброс счётчика скримера
+        spinCounter = 0;
         currentSymbols = ["🍒", "🍒", "🍒"];
         updateReels();
         updateUI();
         showNotification("🔄 Игра сброшена! Счётчик скримера обнулён.");
     }
-    
+
     function toggleSound() {
         isMuted = !isMuted;
         soundToggle.innerText = isMuted ? "🔇" : "🔊";
-        if (masterGain) {
-            masterGain.gain.value = isMuted ? 0 : 0.35;
-        }
-        if (bgGain) {
-            bgGain.gain.value = isMuted ? 0 : 0.12;
-        }
+        if (masterGain) masterGain.gain.value = isMuted ? 0 : 0.35;
+        if (bgGain) bgGain.gain.value = isMuted ? 0 : 0.12;
         showNotification(isMuted ? "🔇 Звук выключен" : "🔊 Звук включён");
+        if (!isMuted && audioCtx && audioCtx.state === 'suspended') audioCtx.resume();
     }
-    
-    // ========== ИНИЦИАЛИЗАЦИЯ И СОБЫТИЯ ==========
+
     spinBtn.addEventListener('click', spin);
     decreaseBetBtn.addEventListener('click', () => changeBet(-10));
     increaseBetBtn.addEventListener('click', () => changeBet(10));
     resetBtn.addEventListener('click', resetGame);
-    soundToggle.addEventListener('click', toggleSound);
+    soundToggle.addEventListener('click', async () => {
+        await initAudio();
+        toggleSound();
+    });
     screamerClose.addEventListener('click', () => {
         screamer.classList.remove('show');
     });
-    
-    // Запуск аудио по первому касанию (политика браузера)
+
     document.body.addEventListener('click', function initAudioOnFirstClick() {
-        if (!audioInitialized) {
-            initAudio();
-        }
+        initAudio();
     }, { once: true });
-    
+
     updateReels();
     updateUI();
-    
     console.log("7K Casino HORROR EDITION — СКРИМЕР КАЖДЫЙ 20 СПИН, ЗВУКИ АКТИВНЫ!");
 </script>
 </body>
